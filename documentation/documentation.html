@@ -1,0 +1,126 @@
+<html>
+   <head>
+      <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+      <style type="text/css">@import url('https://themes.googleusercontent.com/fonts/css?kit=lhDjYqiy3mZ0x6ROQEUoUw');ol{margin:0;padding:0}table td,table th{padding:0}.c16{border-right-style:solid;padding:5pt 5pt 5pt 5pt;border-bottom-color:#000000;border-top-width:1pt;border-right-width:1pt;border-left-color:#000000;vertical-align:top;border-right-color:#000000;border-left-width:1pt;border-top-style:solid;background-color:#000000;border-left-style:solid;border-bottom-width:1pt;width:541.5pt;border-top-color:#000000;border-bottom-style:solid}.c13{border-right-style:solid;padding:5pt 5pt 5pt 5pt;border-bottom-color:#000000;border-top-width:1pt;border-right-width:1pt;border-left-color:#000000;vertical-align:top;border-right-color:#000000;border-left-width:1pt;border-top-style:solid;background-color:#000000;border-left-style:solid;border-bottom-width:1pt;width:542.2pt;border-top-color:#000000;border-bottom-style:solid}.c18{background-color:#000000;color:#f3f3f3;font-weight:normal;text-decoration:none;vertical-align:baseline;font-family:"Consolas";font-style:normal}.c12{padding-top:0pt;padding-bottom:0pt;line-height:1.2;text-align:left}.c8{border-spacing:0;border-collapse:collapse;margin-right:auto}.c2{orphans:2;widows:2;text-align:center;height:11pt}.c5{background-color:#ffffff;max-width:540pt;padding:72pt 36pt 72pt 36pt}.c3{orphans:2;widows:2}.c0{font-size:12pt;font-weight:bold}.c9{text-align:center}.c17{height:0pt}.c14{line-height:1.38}.c7{font-size:14pt}.c20{font-size:30pt}.c6{font-weight:bold}.c1{font-size:18pt}.c19{text-align:justify}.c10{font-size:12pt}.c11{background-color:#ffffff}.c15{margin-right:-1.5pt}.c4{height:11pt}.title{padding-top:0pt;color:#000000;font-size:26pt;padding-bottom:3pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}.subtitle{padding-top:0pt;color:#666666;font-size:15pt;padding-bottom:16pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}li{color:#000000;font-size:11pt;font-family:"Arial"}p{margin:0;color:#000000;font-size:11pt;font-family:"Arial"}h1{padding-top:20pt;color:#000000;font-size:20pt;padding-bottom:6pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h2{padding-top:18pt;color:#000000;font-size:16pt;padding-bottom:6pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h3{padding-top:16pt;color:#434343;font-size:14pt;padding-bottom:4pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h4{padding-top:14pt;color:#666666;font-size:12pt;padding-bottom:4pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h5{padding-top:12pt;color:#666666;font-size:11pt;padding-bottom:4pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h6{padding-top:12pt;color:#666666;font-size:11pt;padding-bottom:4pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;font-style:italic;orphans:2;widows:2;text-align:left}</style>
+   </head>
+   <body class="c5">
+      <p class="c3 c9 c14"><span class="c6 c11 c20">&lt;&lt; Linux Documentation &gt;&gt;</span></p>
+      <p class="c3 c4"><span class="c20 c11"></span></p>
+      <p class="c3 c9 c14"><span class="c6 c1 c11">-- Description --</span></p>
+      <p class="c3 c4"><span class="c1 c11"></span></p>
+      <p class="c3 c14 c19"><span class="c10 c11">The linux machine serves as a proxy data gathering server for PRTG connecting to each IP address added as a cronjob via telnet, gathering location, Signal and Beam every 5 minutes as well as gathering ping and packet loss data every 30 seconds. Data pulled from each IP address is stored in a MYSQL database (e3db) table (e3tb). Custom PRTG sensors are used to pull the gathered data from the MYSQL database and update the values and messages for each sensor.</span></p>
+      <p class="c3 c4"><span class="c10 c11"></span></p>
+      <p class="c3 c4"><span class="c10 c11"></span></p>
+      <p class="c3 c14"><span class="c10 c11">Project files are located inside /home/e3admin/e3systems/</span></p>
+      <a id="t.cd7f69152fcadce22f488ba6f3631c8b6820ffe6"></a><a id="t.0"></a>
+      <table class="c8">
+         <tbody>
+            <tr class="c17">
+               <td class="c13" colspan="1" rowspan="1">
+                  <p class="c12 c3 c15"><span class="c18 c10">[e3admin@localhost e3systems] pwd</span></p>
+                  <p class="c3 c12"><span class="c18 c10">/home/e3admin/e3systems/</span></p>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+      <p class="c3 c15 c4"><span class="c10"></span></p>
+      <a id="t.c3160712d34f45e530ce92e2ffa357e445bae5ef"></a><a id="t.1"></a>
+      <table class="c8">
+         <tbody>
+            <tr class="c17">
+               <td class="c13" colspan="1" rowspan="1">
+                  <p class="c12 c3 c15"><span class="c10 c18">[e3admin@localhost e3systems] ls</span></p>
+                  <p class="c12 c3 c15"><span class="c18 c10">E3systems.sh readme.txt logs documentation scripts sensors css</span></p>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+      <p class="c3 c4"><span class="c10"></span></p>
+      <p class="c3 c4"><span class="c10"></span></p>
+      <p class="c3 c14"><span class="c10 c11">Add a new IP address by running the following custom command:</span></p>
+      <p class="c3 c14"><span class="c0 c11">ip_add ipaddress username password</span></p>
+      <a id="t.491add7358174c00c6bc5c760fd2258e4bdff7dd"></a><a id="t.2"></a>
+      <table class="c8">
+         <tbody>
+            <tr class="c17">
+               <td class="c16" colspan="1" rowspan="1">
+                  <p class="c12 c3"><span class="c18 c10">[e3admin@localhost] ip_add 216.170.180.93 e3admin Pa$$w0rd</span></p>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+      <p class="c3 c4"><span class="c10"></span></p>
+      <p class="c3 c14"><span class="c10 c11">Remove an IP address by running the following custom command:</span></p>
+      <p class="c3 c14"><span class="c0 c11">ip_del ipaddress</span></p>
+      <a id="t.287baa6a00a610ad8de46f5194fe63c771b975e4"></a><a id="t.3"></a>
+      <table class="c8">
+         <tbody>
+            <tr class="c17">
+               <td class="c16" colspan="1" rowspan="1">
+                  <p class="c12 c3"><span class="c18 c10">[e3admin@localhost] ip_del 216.170.180.93</span></p>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+      <p class="c3 c4"><span class="c10"></span></p>
+      <p class="c3 c4"><span class="c10"></span></p>
+      <p class="c3 c9"><span class="c10">-- End of Linux Documentation --</span></p>
+      <p class="c3 c9"><span class="c20 c6">&lt;&lt; PRTG Documentation &gt;&gt;</span></p>
+      <p class="c2"><span class="c1 c6"></span></p>
+      <p class="c2"><span class="c6 c1"></span></p>
+      <p class="c3 c9"><span class="c7 c6">-- Adding a Device --</span></p>
+      <p class="c3 c4"><span class="c7 c6"></span></p>
+      <p class="c3"><span class="c0">1</span><span class="c10">&nbsp;- Enter a desired name for device under &ldquo;Device Name&rdquo;.</span></p>
+      <p class="c3"><span class="c0">2</span><span class="c10">&nbsp;- Select &ldquo;Connect using IPv4&rdquo; under &ldquo;IP Version&rdquo;.</span></p>
+      <p class="c3"><span class="c0">3 </span><span class="c10">- Under &ldquo;IP Address/DNS Name&rdquo;, enter the linux server&rsquo;s IP address.</span></p>
+      <p class="c3"><span class="c0">4</span><span class="c10">&nbsp;- Set &ldquo;Sensor Management&rdquo; to &ldquo;Manual (no discovery)&rdquo;.</span></p>
+      <p class="c3"><span class="c0">5</span><span class="c10">&nbsp;- Make sure &ldquo;Credentials for Linux/Solaris/Mac OS (SSH/WBEM) Systems&rdquo; is selected.</span></p>
+      <p class="c3"><span class="c0">6</span><span class="c10">&nbsp;- Click &ldquo;Continue&rdquo; to go to add the new device.</span></p>
+      <p class="c3 c4"><span class="c1"></span></p>
+      <p class="c3 c9"><span class="c7 c6">-- Adding a Custom Sensor --</span></p>
+      <p class="c2"><span class="c10"></span></p>
+      <p class="c3"><span class="c0">1</span><span class="c10">&nbsp;- Under &ldquo;Monitor What?&rdquo; select &ldquo;Custom Sensors&rdquo;.</span></p>
+      <p class="c3"><span class="c0">2</span><span class="c10">&nbsp;- Under &ldquo;Target System Type&rdquo; select &ldquo;Linux/MacOS&rdquo;.</span></p>
+      <p class="c3"><span class="c0">3</span><span class="c10">&nbsp;- Select &ldquo;SSH Script Advanced&rdquo; and click &ldquo;Add This&rdquo;.</span></p>
+      <p class="c3"><span class="c0">4</span><span class="c10">&nbsp;- Enter desired sensor name under &ldquo;Sensor Name&rdquo;.</span></p>
+      <p class="c3"><span class="c0">5</span><span class="c10">&nbsp;- Select relevant script from drop down list under &ldquo;Script&rdquo;.</span></p>
+      <p class="c3"><span class="c0">6</span><span class="c10">&nbsp;- Enter the IP address that will be monitored under &ldquo;Parameters&rdquo;.</span></p>
+      <p class="c3"><span class="c0">7</span><span class="c10">&nbsp;- Click &ldquo;Continue&rdquo; to go to add the new custom sensor.</span></p>
+      <p class="c3 c4"><span class="c1"></span></p>
+      <p class="c3 c9"><span class="c7 c6">-- Adding a Custom Map Object --</span></p>
+      <p class="c3 c4"><span class="c10"></span></p>
+      <p class="c3"><span class="c0">1</span><span class="c10">&nbsp;- Select the sensor created from the previous steps from the &ldquo;Device Tree&rdquo; on the &nbsp;left side.</span></p>
+      <p class="c3"><span class="c0">2</span><span class="c10">&nbsp;- Select the &ldquo;Status Icons&rdquo; list from the &ldquo;Properties&rdquo; section on the right side.</span></p>
+      <p class="c3"><span class="c0">3</span><span class="c10">&nbsp;- Find the desired custom map object &ldquo;custom_message_e3systems&rdquo; and drag to the map.</span></p>
+      <p class="c3 c4"><span class="c10"></span></p>
+      <p class="c3 c4"><span class="c10"></span></p>
+      <p class="c3 c4"><span class="c10"></span></p>
+      <p class="c3 c4"><span class="c10"></span></p>
+      <p class="c3 c4"><span class="c10"></span></p>
+      <p class="c3 c9"><span class="c10">-- Instructional screenshots provided on next pages --</span></p>
+      <p class="c2"><span class="c7 c6"></span></p>
+      <p class="c3 c9"><span class="c7 c6">-- </span><span class="c6 c7">Adding a Device --</span></p>
+      <p class="c3 c4"><span class="c6 c1"></span></p>
+      <p class="c3 c9"><span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 702.67px;"><img alt="device01.jpg" src="images/image03.jpg" style="width: 624.00px; height: 702.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p>
+      <p class="c2"><span class="c7 c6"></span></p>
+      <p class="c2"><span class="c7 c6"></span></p>
+      <p class="c2"><span class="c7 c6"></span></p>
+      <p class="c3 c9"><span class="c7 c6">-- Adding a Custom Sensor --</span></p>
+      <p class="c3 c4"><span class="c6 c1"></span></p>
+      <p class="c3 c9"><span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 537.33px;"><img alt="sensor01.jpg" src="images/image00.jpg" style="width: 624.00px; height: 537.33px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p>
+      <p class="c2"><span class="c6 c1"></span></p>
+      <p class="c2"><span class="c10"></span></p>
+      <p class="c2"><span class="c1"></span></p>
+      <p class="c2"><span class="c10"></span></p>
+      <p class="c2"><span class="c10"></span></p>
+      <p class="c3 c9"><span class="c10">-- Adding a Custom Sensor</span><span class="c0">&nbsp;</span><span class="c10">continued on next page --</span></p>
+      <p class="c3 c4"><span class="c6 c1"></span></p>
+      <p class="c3 c9"><span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 848.00px;"><img alt="sensor02.jpg" src="images/image01.jpg" style="width: 624.00px; height: 848.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p>
+      <p class="c3 c9"><span class="c7 c6">-- Adding a Custom Map Object --</span></p>
+      <p class="c2"><span class="c6 c1"></span></p>
+      <p class="c3 c9"><span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 716.00px;"><img alt="map01.jpg" src="images/image02.jpg" style="width: 624.00px; height: 716.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p>
+      <p class="c2"><span class="c6 c1"></span></p>
+      <p class="c2"><span class="c0"></span></p>
+      <p class="c3 c9"><span class="c10">-- End of PRTG Documentation --</span></p>
+   </body>
+</html>
