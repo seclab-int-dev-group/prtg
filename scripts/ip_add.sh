@@ -50,6 +50,9 @@ else
     
     	# Output warning if telnet script did not populate mysql database fields.
     	echo " << IP address $1 did not succesfully complete the telnet connection test >> "
+    	
+	# Clear IP address from database.   
+    	mysql $db -u$dbuser -p$dbpass -e "DELETE FROM $table WHERE IP_Address='$1';"
 	
     else
     
