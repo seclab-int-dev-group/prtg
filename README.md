@@ -4,14 +4,14 @@
 The linux server serves as a proxy data gathering server for PRTG Network Monitor connecting to each IP address added as a cronjob via telnet, gathering location, Signal and Beam data every 5 minutes as well as gathering ping and packet loss data every 30 seconds. Data pulled from each IP address is stored in a MYSQL database (e3db) table (e3tb). Custom PRTG sensors are used to pull the gathered data for each IP address from the MYSQL database on the Linux server and update the values, messages and control room map for each sensor on PRTG Network Monitor.
 
 Project files are located inside ***/home/e3admin/e3systems/***
-![linux01.jpg](images/image02.jpg)
-![linux02.jpg](images/image06.jpg)
+![linux01.jpg](documentation/images/image02.jpg)
+![linux02.jpg](documentation/images/image06.jpg)
 
 Add a new IP address by running the following custom command: ***ip_add ipaddress username password***
-![linux03.jpg](images/image03.jpg)
+![linux03.jpg](documentation/images/image03.jpg)
 
 Remove an IP address by running the following custom command: ***ip_del ipaddress***
-![linux04.jpg](images/image00.jpg)
+![linux04.jpg](documentation/images/image00.jpg)
 ---
 <br>
 #PRTG Network Monitor Documentation
@@ -25,7 +25,7 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ***Step 5*** - Make sure “Credentials for Linux/Solaris/Mac OS (SSH/WBEM) Systems” is selected.<br>
 ***Step 6*** - Click “Continue” to go to add the new device.<br>
 
-![device01.jpg](images/image07.jpg)
+![device01.jpg](documentation/images/image07.jpg)
 ---
 <br>
 ###Adding a Custom Sensor
@@ -38,8 +38,8 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ***Step 6*** - Enter the IP address that will be monitored under “Parameters”.<br>
 ***Step 7*** - Click “Continue” to go to add the new custom sensor.<br>
 
-![sensor01.jpg](images/image01.jpg)
-![sensor02.jpg](images/image04.jpg)
+![sensor01.jpg](documentation/images/image01.jpg)
+![sensor02.jpg](documentation/images/image04.jpg)
 ---
 <br>
 ###Adding a Custom Map Object
@@ -48,5 +48,5 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ***Step 2*** - Select the “Status Icons” list from the “Properties” section on the right side.<br>
 ***Step 3*** - Find the desired custom map object “custom_message_e3systems” and drag to the map.<br>
 
-<![map01.jpg](images/image05.jpg)
+<![map01.jpg](documentation/images/image05.jpg)
 ---
