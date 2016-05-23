@@ -28,7 +28,7 @@ else
   if  [ "$cron" == "$1" ]; then
     
     # Output warning if IP address is found in current schedule.
-    echo " << IP address $1 was already previously set in current schedule >> "
+    echo " << IP address $1 has already been added to current schedule >> "
   
   else
 	    
@@ -43,20 +43,32 @@ else
     # Run ping script once to test populate database with ping and packet loss data.
     /home/$user/e3systems/scripts/ip_ping.sh $1
 
-    # Add line to crontab to run e3systems.sh script every 5 minutes with IP address, username and password arguments.
-    sudo sh -c "echo '*/5 * * * * $user \
-    /home/$user/e3systems/e3systems.sh $1 $2 $3' \
-    >> /etc/crontab"
-    
-    # Add line to crontab to run ipping.sh script command every minute with IP address arguments.
-    sudo sh -c "echo '* * * * * $user \
-    /home/$user/e3systems/scripts/ip_ping.sh $1; \
-    sleep 30; \
-    /home/$user/e3systems/scripts/ip_ping.sh $1' \
-    >> /etc/crontab"
+    $lat=$(mysql $db -u$dbuser -p$dbpass -e "SELECT Latitude FROM $table WHERE IP_Address='$1';" \
+    | grep -v 'Latitude')
 
-    # Ouput IP address added as crontab entry.
-    echo "<< IP address $1 added to schedule >>"
+    if [ -z "$lat" ]; then
+    
+    	# Output warning if telnet script did not populate mysql database fields.
+    	echo " << IP address $1 did not succesfully complete the telnet connection test >> "
+	
+    else
+    
+    	# Add line to crontab to run e3systems.sh script every 5 minutes with IP address, username and password arguments.
+    	sudo sh -c "echo '*/5 * * * * $user \
+    	/home/$user/e3systems/e3systems.sh $1 $2 $3' \
+    	>> /etc/crontab"
+    
+	# Add line to crontab to run ipping.sh script command every minute with IP address arguments.
+    	sudo sh -c "echo '* * * * * $user \
+    	/home/$user/e3systems/scripts/ip_ping.sh $1; \
+    	sleep 30; \
+    	/home/$user/e3systems/scripts/ip_ping.sh $1' \
+    	>> /etc/crontab"
+
+    	# Ouput IP address added as crontab entry.
+    	echo "<< IP address $1 added to schedule >>"
+    	
+    fi
   fi
 fi
 
