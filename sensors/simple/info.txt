@@ -1,0 +1,1 @@
+# This folder is a soft link to the /var/prtf/scripts directory that holds custom simple ssh sensors.
