@@ -1,8 +1,6 @@
-<span class="c0"><< Linux Documentation >></span>
-
-<span class="c8 c13"></span>
-
-<span class="c1">-- Description --</span>
+#Linux Documentation
+<br>
+###Description
 
 <span class="c8 c15"></span>
 
