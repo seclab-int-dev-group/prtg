@@ -7,8 +7,16 @@ Project files are located inside ***/home/e3admin/e3systems/***
 ![image00.jpg](images/image00.jpg)
 ![image01.jpg](images/image01.jpg)
 
+---
+<br>
+###Adding an IP Address
+
 Add a new IP address by running the following custom command: ***ip_add ipaddress username password***
 ![image02.jpg](images/image02.jpg)
+
+---
+<br>
+###Removing an IP Address
 
 Remove an IP address by running the following custom command: ***ip_del ipaddress***
 ![image03.jpg](images/image03.jpg)
