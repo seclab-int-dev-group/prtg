@@ -10,9 +10,8 @@ The CentOS 7 server serves as a proxy data gathering server for PRTG Network Mon
 Project files are located inside ***/home/e3admin/e3systems/***
 ![image00.jpg](images/image00.jpg)
 ![image01.jpg](images/image01.jpg)
-<br>
+
 ---
-<br>
 ###Adding an IP Address
 
 Add a new IP address by running the following custom command: ***ip_add ipaddress username password***
