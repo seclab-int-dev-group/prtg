@@ -1,1 +1,1 @@
-
+# This folder holds command output data logs for each IP address.
