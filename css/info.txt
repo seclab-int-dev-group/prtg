@@ -1,0 +1,2 @@
+# This folder holds the custom ptrg css file.
+# Copy styles_custom.css file (overwrite existing default file) to the /webroot/css/ location in PRTG folder.
