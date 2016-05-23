@@ -48,5 +48,5 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ***Step 2*** - Select the “Status Icons” list from the “Properties” section on the right side.<br>
 ***Step 3*** - Find the desired custom map object “custom_message_e3systems” and drag to the map.<br>
 
-<![image07.jpg](images/image07.jpg)
+![image07.jpg](images/image07.jpg)
 ---
