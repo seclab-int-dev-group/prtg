@@ -18,14 +18,12 @@ Add a new IP address by running the following custom command: ***ip_add ipaddres
 ![image02.jpg](images/image02.jpg)
 
 ---
-<br>
 ###Removing an IP Address
 
 Remove an IP address by running the following custom command: ***ip_del ipaddress***
 ![image03.jpg](images/image03.jpg)
 
 ---
-<br>
 #PRTG Network Monitor Documentation
 
 ###Adding a Device
