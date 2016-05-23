@@ -1,4 +1,4 @@
-#Linux Documentation
+#Linux Server Documentation
 
 ###Description
 The linux machine serves as a proxy data gathering server for PRTG connecting to each IP address added as a cronjob via telnet, gathering location, Signal and Beam every 5 minutes as well as gathering ping and packet loss data every 30 seconds. Data pulled from each IP address is stored in a MYSQL database (e3db) table (e3tb). Custom PRTG sensors are used to pull the gathered data from the MYSQL database and update the values and messages for each sensor.
@@ -13,7 +13,7 @@ Add a new IP address by running the following custom command: ***ip_add ipaddres
 Remove an IP address by running the following custom command: ***ip_del ipaddress***
 ![linux04.jpg](images/image00.jpg)
 
-#PRTG Documentation
+#PRTG Network Monitor Documentation
 
 ###Adding a Device
 
