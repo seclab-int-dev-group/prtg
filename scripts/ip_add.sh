@@ -38,12 +38,12 @@ else
     VALUES ('$1');"
 
     # Run main script once to test connection, credentials and populate database.
-    /home/$user/e3systems/e3systems.sh $1 $2 $3
+    /home/$user/e3systems/e3systems.sh "$1" "$2" "$3"
     
     # Run ping script once to test populate database with ping and packet loss data.
-    /home/$user/e3systems/scripts/ip_ping.sh $1
+    /home/$user/e3systems/scripts/ip_ping.sh "$1"
 
-    $lat=$(mysql $db -u$dbuser -p$dbpass -e "SELECT Latitude FROM $table WHERE IP_Address='$1';" \
+    lat=$(mysql $db -u$dbuser -p$dbpass -e "SELECT Latitude FROM $table WHERE IP_Address='$1';" \
     | grep -v 'Latitude')
 
     if [ -z "$lat" ]; then
