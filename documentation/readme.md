@@ -13,31 +13,19 @@ Add a new IP address by running the following custom command: ***ip_add ipaddres
 Remove an IP address by running the following custom command: ***ip_del ipaddress***
 ![linux04.jpg](images/image00.jpg)
 
+#PRTG Documentation
 
+###Adding a Device
 
-<span class="c10"><< PRTG Documentation >></span>
+***Step 1*** - Enter a desired name for device under “Device Name”.<br>
+***Step 2*** - Select “Connect using IPv4” under “IP Version”.<br>
+***Step 3*** - Under “IP Address/DNS Name”, enter the linux server’s IP address.<br>
+***Step 4*** - Set “Sensor Management” to “Manual (no discovery)”.<br>
+***Step 5*** - Make sure “Credentials for Linux/Solaris/Mac OS (SSH/WBEM) Systems” is selected.<br>
+***Step 6*** - Click “Continue” to go to add the new device.<br>
 
-<span class="c2"></span>
+![device01.jpg](images/image07.jpg)
 
-<span class="c2"></span>
-
-<span class="c9">-- Adding a Device --</span>
-
-<span class="c9"></span>
-
-<span class="c12 c4">1</span><span class="c4"> - Enter a desired name for device under “Device Name”.</span>
-
-<span class="c12 c4">2</span><span class="c4"> - Select “Connect using IPv4” under “IP Version”.</span>
-
-<span class="c12 c4">3</span> <span class="c4">- Under “IP Address/DNS Name”, enter the linux server’s IP address.</span>
-
-<span class="c12 c4">4</span><span class="c4"> - Set “Sensor Management” to “Manual (no discovery)”.</span>
-
-<span class="c4 c12">5</span><span class="c4"> - Make sure “Credentials for Linux/Solaris/Mac OS (SSH/WBEM) Systems” is selected.</span>
-
-<span class="c12 c4">6</span><span class="c4"> - Click “Continue” to go to add the new device.</span>
-
-<span class="c15"></span>
 
 <span class="c9">-- Adding a Custom Sensor --</span>
 
