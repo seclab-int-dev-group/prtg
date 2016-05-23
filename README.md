@@ -27,6 +27,7 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ***Step 6*** - Click “Continue” to go to add the new device.<br>
 
 ![image04.jpg](images/image04.jpg)
+
 ---
 <br>
 ###Adding a Custom Sensor
@@ -41,6 +42,7 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 
 ![image05.jpg](images/image05.jpg)
 ![image06.jpg](images/image06.jpg)
+
 ---
 <br>
 ###Adding a Custom Map Object
@@ -50,4 +52,5 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ***Step 3*** - Find the desired custom map object “custom_message_e3systems” and drag to the map.<br>
 
 ![image07.jpg](images/image07.jpg)
+
 ---
