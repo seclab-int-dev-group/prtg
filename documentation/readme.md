@@ -12,7 +12,8 @@ Add a new IP address by running the following custom command: ***ip_add ipaddres
 
 Remove an IP address by running the following custom command: ***ip_del ipaddress***
 ![linux04.jpg](images/image00.jpg)
-
+---
+<br>
 #PRTG Network Monitor Documentation
 
 ###Adding a Device
@@ -25,7 +26,8 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ***Step 6*** - Click “Continue” to go to add the new device.<br>
 
 ![device01.jpg](images/image07.jpg)
-
+---
+<br>
 ###Adding a Custom Sensor
 
 ***Step 1*** - Under “Monitor What?” select “Custom Sensors”.<br>
@@ -38,7 +40,8 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 
 ![sensor01.jpg](images/image01.jpg)
 ![sensor02.jpg](images/image04.jpg)
-
+---
+<br>
 ###Adding a Custom Map Object
 
 ***Step 1*** - Select the sensor created from the previous steps from the “Device Tree” on the  left side.<br>
@@ -46,3 +49,4 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ***Step 3*** - Find the desired custom map object “custom_message_e3systems” and drag to the map.<br>
 
 <![map01.jpg](images/image05.jpg)
+---
