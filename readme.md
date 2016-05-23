@@ -1,4 +1,10 @@
 #E3Systems Documentation
+<sub>**Created by:** William Thomas Bland<br>
+**Current Version:** 16.0523.2145<br>
+**Last updated:** 21:45 23/05/16
+</sub>
+---
+
 
 ###Description
 
