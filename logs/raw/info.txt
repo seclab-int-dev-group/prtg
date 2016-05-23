@@ -1,1 +1,1 @@
-
+# This folder holds raw data logs from the telnet session of each IP address.
