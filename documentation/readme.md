@@ -3,16 +3,14 @@
 ###Description
 The linux machine serves as a proxy data gathering server for PRTG connecting to each IP address added as a cronjob via telnet, gathering location, Signal and Beam every 5 minutes as well as gathering ping and packet loss data every 30 seconds. Data pulled from each IP address is stored in a MYSQL database (e3db) table (e3tb). Custom PRTG sensors are used to pull the gathered data from the MYSQL database and update the values and messages for each sensor.
 
-Project files are located inside /home/e3admin/e3systems/
+Project files are located inside ***/home/e3admin/e3systems/***
 ![linux01.jpg](images/image02.jpg)
 ![linux02.jpg](images/image06.jpg)
 
-Add a new IP address by running the following custom command:
-*ip_add ipaddress username password*
+Add a new IP address by running the following custom command: ***ip_add ipaddress username password***
 ![linux03.jpg](images/image03.jpg)
 
-Remove an IP address by running the following custom command:
-*ip_del ipaddress*
+Remove an IP address by running the following custom command: ***ip_del ipaddress***
 ![linux04.jpg](images/image00.jpg)
 
 
