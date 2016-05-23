@@ -24,6 +24,7 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ![image03.jpg](images/image03.jpg)
 
 ---
+<br>
 #PRTG Network Monitor Documentation
 
 ###Adding a Device
@@ -38,7 +39,6 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ![image04.jpg](images/image04.jpg)
 
 ---
-<br>
 ###Adding a Custom Sensor
 
 ***Step 1*** - Under “Monitor What?” select “Custom Sensors”.<br>
@@ -53,7 +53,6 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ![image06.jpg](images/image06.jpg)
 
 ---
-<br>
 ###Adding a Custom Map Object
 
 ***Step 1*** - Select the sensor created from the previous steps from the “Device Tree” on the  left side.<br>
