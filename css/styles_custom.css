@@ -1,0 +1,11 @@
+.map_icon_customfont .moreicon {
+  display: none;
+}
+.map_icon_customfont, .map_icon_customfont div, .map_icon_customfont span, td.map_icon_customfont {
+  font-size: 17px;
+  font-weight: bold;
+}
+.map_icon_customfont .status {
+  font-size: 17px;
+  font-weight: bold;
+}
