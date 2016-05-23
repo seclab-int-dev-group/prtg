@@ -26,24 +26,19 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 
 ![device01.jpg](images/image07.jpg)
 
+###Adding a Custom Sensor
 
-<span class="c9">-- Adding a Custom Sensor --</span>
 
-<span class="c4"></span>
+***Step 1*** - Under “Monitor What?” select “Custom Sensors”.<br>
+***Step 2*** - Under “Target System Type” select “Linux/MacOS”.<br>
+***Step 3*** - Select “SSH Script Advanced” and click “Add This”.<br>
+***Step 4*** - Enter desired sensor name under “Sensor Name”.<br>
+***Step 5*** - Select relevant script from drop down list under “Script”.<br>
+***Step 6*** - Enter the IP address that will be monitored under “Parameters”.<br>
+***Step 7*** - Click “Continue” to go to add the new custom sensor.<br>
 
-<span class="c12 c4">1</span><span class="c4"> - Under “Monitor What?” select “Custom Sensors”.</span>
-
-<span class="c12 c4">2</span><span class="c4"> - Under “Target System Type” select “Linux/MacOS”.</span>
-
-<span class="c12 c4">3</span><span class="c4"> - Select “SSH Script Advanced” and click “Add This”.</span>
-
-<span class="c12 c4">4</span><span class="c4"> - Enter desired sensor name under “Sensor Name”.</span>
-
-<span class="c12 c4">5</span><span class="c4"> - Select relevant script from drop down list under “Script”.</span>
-
-<span class="c12 c4">6</span><span class="c4"> - Enter the IP address that will be monitored under “Parameters”.</span>
-
-<span class="c12 c4">7</span><span class="c4"> - Click “Continue” to go to add the new custom sensor.</span>
+![sensor01.jpg](images/image01.jpg)
+![sensor02.jpg](images/image04.jpg)
 
 <span class="c15"></span>
 
@@ -103,7 +98,8 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 
 <span class="c2"></span>
 
-<span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 848.00px;">![sensor02.jpg](images/image04.jpg)</span>
+<span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 848.00px;">
+</span>
 
 <span class="c9">-- Adding a Custom Map Object --</span>
 
