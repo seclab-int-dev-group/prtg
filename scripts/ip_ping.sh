@@ -16,16 +16,16 @@ pinglog="/home/$user/e3systems/logs/ping"
 
 ###############################################################################################################################
 
-until [ -z "$ping" ] || [ -z "$pktloss" ]; do 
+until [ -n "$ping" ] && [ -n "$pktloss" ]; do 
 
-# Populate log file returned ping output.
-ping -c1 "$1" > $pinglog/"$1"
+  # Populate log file returned ping output.
+  ping -c1 "$1" > $pinglog/"$1"
 
-# Populate ping variable with current ping returned.
-ping=$(grep 'time=' $pinglog/"$1" | cut -d'=' -f4 | sed 's/ ms//g')
+  # Populate ping variable with current ping returned.
+  ping=$(grep 'time=' $pinglog/"$1" | cut -d'=' -f4 | sed 's/ ms//g')
 
-# Populate packet loss variable with current packet loss returned.
-pktloss=$(grep 'packet loss' $pinglog/"$1" | cut -d' ' -f6 | sed 's/%//g')
+  # Populate packet loss variable with current packet loss returned.
+  pktloss=$(grep 'packet loss' $pinglog/"$1" | cut -d' ' -f6 | sed 's/%//g')
 
 done
 
