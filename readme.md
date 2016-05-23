@@ -1,10 +1,13 @@
-#CentOS 7 Server Documentation
+#E3Systems Documentation
 
 ###Description
 
-The CentOS 7 server serves as a proxy data gathering server for PRTG Network Monitor connecting to each IP address added as a cronjob via telnet, gathering location, Signal and Beam data every 5 minutes as well as gathering ping and packet loss data every 30 seconds. Data pulled from each IP address is stored in a MYSQL database on the CentOS 7 server. Custom PRTG SSH sensors are used to pull the gathered data for each IP address from the MYSQL database and update the values, messages and control room map for each sensor on PRTG Network Monitor.
+The system runs a dedicated CentOS 7 server serving as a proxy data gathering server for PRTG Network Monitor connecting to each IP address added as a cronjob via telnet, gathering location, Signal and Beam data every 5 minutes as well as gathering ping and packet loss data every 30 seconds. Data pulled from each IP address is stored in a MYSQL database on the CentOS 7 server. Custom PRTG SSH sensors are used to pull the gathered data for each IP address from the MYSQL database and update the values, messages and control room map for each sensor on PRTG Network Monitor.
 
 ---
+
+##CentOS 7 Server
+
 ###Project Files Location
 
 Project files are located inside ***/home/e3admin/e3systems/***
