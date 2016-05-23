@@ -22,13 +22,18 @@ STRUCTURE:                               |---->e3systems.sh
                                          |                              |---->beam.sh
                                          |                              |---->ping.sh
                                          |---->logs--->raw
-                                                 |      |---->ip.log
-                                                 |
-                                                 |---->output
-                                                 |      |---->ip.log
-                                                 |
-                                                 |----->ping
-                                                        |---->ip.log
+                                         |       |       |---->ip.log
+                                         |       |
+                                         |       |---->output
+                                         |       |       |---->ip.log
+                                         |       |
+                                         |       |----->ping
+                                         |               |---->ip.log
+                                         |                
+                                         |----->documentation
+                                                         |---->images
+                                                         |---->documentation.html
+                                                         |---->documentation.pdf
                                                         
 ###############################################################################################################
 
