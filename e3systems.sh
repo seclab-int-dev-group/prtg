@@ -63,4 +63,61 @@ Beam_Int='$beamint', \
 Beam_Str='$beamstr' \
 WHERE IP_Address='$1';"
 
+# Check if IP address is set as a map marker and populate variable
+checkip=$(grep "$1" /var/www/html/map/map-global.html)
+
+# Check if IP address is not set as a map marker and gelocation data is populated in database.
+if [ -z "$checkip" ] && [ -n "$lat" ] && [ -n "$long" ]; then
+
+  # List Map locations
+  for loc in global eu us do
+  
+    # Add markers to all maps.
+    sed -i "s/<!-- START MAP MARKERS -->/<!-- START MAP MARKERS -->\n \
+    <!-- START SET $1 -->\n \
+    var $4_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),});\n \
+    $4_marker.setMap(map);\n \
+    var $4_info = new google.maps.InfoWindow({content:\"$name\"});\n \
+    google.maps.event.addListener($4_marker, \'click\', function() {$4_info.open(map,$4_marker);});\n \
+    <!-- END SET $1 -->/g" /var/www/html/map/map-$loc.html
+  
+  done
+
+else
+
+# Check if IP address is not set as a map marker and gelocation data is not populated in database.
+if [ -z "$checkip" ] || [ -z "$lat" ] || [ -z "$long" ]; then
+
+        # Output warning that marker will not be added.
+        echo "Could not complete $1 connection. Skipping marker update."
+
+else
+
+        # Convert Latitude variable to PRTG compatible value.
+        if [[ $lat == *N ]]; then
+                lat=$(echo "$lat" | sed 's/.$//')
+        else
+                lat=$(echo "-$lat" | sed 's/.$//')
+        fi
+
+        # Convert Longitude variable to PRTG compatible value.
+        if [[ $long == *E ]]; then
+                long=$(echo "$long" | sed 's/.$//')
+        else
+                long=$(echo "-$long" | sed 's/.$//')
+        fi
+        
+        # List Map locations
+        for loc in global eu us do
+        
+          # update marker on all maps.
+          sed -i "s/^var $4_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),});$ \
+          /var $4_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});/"  \
+          /var/www/html/map/map-$loc.html
+          
+        done
+  fi
+  
+fi
+
 exit 0
