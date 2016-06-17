@@ -15,6 +15,8 @@ dbpass="E3System5!"                                   # MySQL database password
 outlog="/home/$user/e3systems/logs/output/"           # Output log file location.
 rawlog="/home/$user/e3systems/logs/raw/"              # Raw log file location.
 telnet="/home/$user/e3systems/scripts/ip_tel.sh"      # Telnet script location.
+name=$(echo $4 | tr '[:lower:]' '[:upper:]' \		    	# Vessel name.
+ | sed -e 's/_/ /g')
 
 ###############################################################################################################################
 
@@ -77,7 +79,7 @@ if [ -z "$checkip" ] && [ -n "$lat" ] && [ -n "$long" ]; then
     # Add markers to all maps.
     sed -i "s/<!-- START MAP MARKERS -->/<!-- START MAP MARKERS -->\n \
     <!-- START SET $1 -->\n \
-    var $4_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),});\n \
+    var $4_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});\n \
     $4_marker.setMap(map);\n \
     var $4_info = new google.maps.InfoWindow({content:\"$name\"});\n \
     google.maps.event.addListener($4_marker, \'click\', function() {$4_info.open(map,$4_marker);});\n \
