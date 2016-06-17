@@ -16,20 +16,38 @@ pinglog="/home/$user/e3systems/logs/ping"
 
 ###############################################################################################################################
 
-until [ -n "$ping" ] && [ -n "$pktloss" ]; do 
+# Populate log file returned ping output.
+ping -c5 -t20 "$1" &> $pinglog/"$1"
 
-  # Populate log file returned ping output.
-  ping -c1 "$1" > $pinglog/"$1"
+check=$(grep 'unknown host' $pinglog/"$1")
+check=$(grep '5 packets transmitted, ' $pinglog/"$1" | cut -d' ' -f3)
 
-  # Populate ping variable with current ping returned.
-  ping=$(grep 'time=' $pinglog/"$1" | cut -d'=' -f4 | sed 's/ ms//g')
+if [ -n $check ]; then
 
-  # Populate packet loss variable with current packet loss returned.
-  pktloss=$(grep 'packet loss' $pinglog/"$1" | cut -d' ' -f6 | sed 's/%//g')
+  echo "<< IP address is not correct >>"
 
-done
+else
+  
+  if [ $check="0" ]; then
 
-# Output returned value to mysql database
-mysql $db -u$dbuser -p$dbpass -e "UPDATE $table SET Ping='$ping', Packet_loss='$pktloss' WHERE IP_Address='$1';"
+    # Populate ping variable with current ping returned.
+    ping="Timed out"
+    # Populate packet loss variable with current packet loss returned.
+    pktloss=$(grep 'packet loss' $pinglog/"$1" | cut -d' ' -f6 | sed 's/%//g')
+
+  else
+  
+    # Populate ping variable with current ping returned.
+    ping=$(grep 'rtt min/avg/max/mdev = ' $pinglog/"$1" | cut -d'/' -f5 | sed 's/ ms//g')
+  
+    # Populate packet loss variable with current packet loss returned.
+    pktloss=$(grep 'packet loss' $pinglog/"$1" | cut -d' ' -f6 | sed 's/%//g')
+  
+  fi
+
+  # Output returned value to mysql database
+  mysql $db -u$dbuser -p$dbpass -e "UPDATE $table SET Ping='$ping', Packet_loss='$pktloss' WHERE IP_Address='$1';"
+
+fi
 
 exit 0
