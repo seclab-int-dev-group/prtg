@@ -38,7 +38,7 @@ if [[ $1 =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
  done
 
  # Check if options are populated.
- if [ -n "$1" ] || [ -n "$2" ] || [ -n "$3" ] || [ -n "$4" ] || [ -z "$5" ] || [ "$check" == 4 ]; then
+ if [ -n "$1" ] && [ -n "$2" ] && [ -n "$3" ] && [ -n "$4" ] && [ -z "$5" ] && [ "$check" == 4 ]; then
 
    # Check if IP address is already populated in schedule.
    if  [ "$cron" == "$1" ]; then
