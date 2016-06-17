@@ -12,32 +12,33 @@ db="e3db"           						# MySQL database name.
 table="e3tb"        						# MySQL table name.
 dbuser="e3admin"           					# MySQL database username.
 dbpass="E3System5!"           					# MySQL database password.
-vessel=$(echo $4 | tr '[:upper:]' '[:lower:]' \			# Vessel name.
- | sed -e 's/ /_/g')
+vessel=$(echo "$4" | tr '[:upper:]' '[:lower:]' | \             # Vessel name.
+sed -e 's/ /_/g')
 cron=$(mysql $db -u$dbuser -p$dbpass -e \			# Cronjob IP address.
-"SELECT IP_Address FROM $table WHERE IP_Address='$1';" \
- | grep -v 'IP_Address')
-check=0
+"SELECT IP_Address FROM $table WHERE IP_Address='$1';" | \
+grep -v 'IP_Address')
 
 ###############################################################################################################################
 
 # Check if IP address is correct.
 if [[ $1 =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
 
+ check=0
+
  for i in {1..4}; do
  
-  ip=$(echo $1 | cut -d'.' -f$i)
+  ip=$(echo "$1" | cut -d'.' -f"$i")
  
-  if [ $ip -le 254 ] && [ -n $ip]; then
+  if [ "$ip" -le 254 ]; then
 
-   check=$(( $check + 1 ))
+   check=$(( "$check" + 1 ))
    
   fi
  
  done
 
  # Check if options are populated.
- if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -n "$5" ]; then
+ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -n "$5" ] || [ $check -lt 4 ]; then
 
    # Output error if options are not populated.
    echo "<< Invalid entry >> Correct usage: ip_add ipaddress username password vessel"
@@ -55,13 +56,13 @@ if [[ $1 =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
      # Insert IP address into new row in mysql databse.
      mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
      $table (IP_Address) \
-     VALUES ('$1');"
+     VALUES (\'$1\');"
     
      # Insert vessel name into new row in mysql databse.
      mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
      $table (Vessel) \
      VALUES ('$vessel') \
-     WHERE IP_Address="$1";"
+     WHERE IP_Address=\"$1\";"
 
      # Run main script once to test connection, credentials and populate database.
      /home/$user/e3systems/e3systems.sh "$1" "$2" "$3" "$vessel"
