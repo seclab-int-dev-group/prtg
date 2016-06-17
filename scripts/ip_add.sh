@@ -17,14 +17,30 @@ vessel=$(echo $4 | tr '[:upper:]' '[:lower:]' \			# Vessel name.
 cron=$(mysql $db -u$dbuser -p$dbpass -e \			# Cronjob IP address.
 "SELECT IP_Address FROM $table WHERE IP_Address='$1';" \
  | grep -v 'IP_Address')
+check=0
 
 ###############################################################################################################################
+
+
+if [[ $1 =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+
+ for i in {1..4}; do
+ 
+  ip=$(echo $1 | cut -d'.' -f$i)
+ 
+  if [ $ip -le 254 ] && [ -n $ip]; then
+
+   check=$(( $check + 1 ))
+   
+  fi
+ 
+ done
 
 # Check if options are populated.
 if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -n "$5" ]; then
 
   # Output error if options are not populated.
-  echo "<< Invalid entry >> Correct usage: ipadd [ipaddress] [username] [password] [vesselname]"
+  echo "<< Invalid entry >> Correct usage: ipadd [ipaddress] [username] [password] [vessel]"
 
 else
   
@@ -83,6 +99,12 @@ else
     	
     fi
   fi
+fi
+
+else
+
+ echo "<< $1 is not a valid IP address >>"
+
 fi
 
 exit 0
