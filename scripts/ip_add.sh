@@ -21,7 +21,7 @@ check=0
 
 ###############################################################################################################################
 
-
+# Check if IP address is correct.
 if [[ $1 =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
 
  for i in {1..4}; do
@@ -36,74 +36,74 @@ if [[ $1 =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
  
  done
 
-# Check if options are populated.
-if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -n "$5" ]; then
+ # Check if options are populated.
+ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -n "$5" ]; then
 
-  # Output error if options are not populated.
-  echo "<< Invalid entry >> Correct usage: ipadd [ipaddress] [username] [password] [vessel]"
+   # Output error if options are not populated.
+   echo "<< Invalid entry >> Correct usage: ip_add ipaddress username password vessel"
 
-else
+ else
   
-  # Check if IP address is already populated in schedule.
-  if  [ "$cron" == "$1" ]; then
+   # Check if IP address is already populated in schedule.
+   if  [ "$cron" == "$1" ]; then
     
-    # Output warning if IP address is found in current schedule.
-    echo "<< IP address $1 has already been added to the current schedule >>"
+     # Output warning if IP address is found in current schedule.
+     echo "<< IP address $1 has already been added to the current schedule >>"
   
-  else
+   else
 	    
-    # Insert IP address into new row in mysql databse.
-    mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
-    $table (IP_Address) \
-    VALUES ('$1');"
+     # Insert IP address into new row in mysql databse.
+     mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
+     $table (IP_Address) \
+     VALUES ('$1');"
     
-    # Insert vessel name into new row in mysql databse.
-    mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
-    $table (Vessel) \
-    VALUES ('$vessel') \
-    WHERE IP_Address="$1";"
+     # Insert vessel name into new row in mysql databse.
+     mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
+     $table (Vessel) \
+     VALUES ('$vessel') \
+     WHERE IP_Address="$1";"
 
-    # Run main script once to test connection, credentials and populate database.
-    /home/$user/e3systems/e3systems.sh "$1" "$2" "$3" "$vessel"
+     # Run main script once to test connection, credentials and populate database.
+     /home/$user/e3systems/e3systems.sh "$1" "$2" "$3" "$vessel"
     
-    # Run ping script once to test populate database with ping and packet loss data.
-    /home/$user/e3systems/scripts/ip_ping.sh "$1"
+     # Run ping script once to test populate database with ping and packet loss data.
+     /home/$user/e3systems/scripts/ip_ping.sh "$1"
 
-    lat=$(mysql $db -u$dbuser -p$dbpass -e "SELECT Latitude FROM $table WHERE IP_Address='$1';" \
-    | grep -v 'Latitude')
+     lat=$(mysql $db -u$dbuser -p$dbpass -e "SELECT Latitude FROM $table WHERE IP_Address='$1';" \
+     | grep -v 'Latitude')
 
-    if [ -z "$lat" ]; then
+     if [ -z "$lat" ]; then
     
-    	# Output warning if telnet script did not populate mysql database fields.
-    	echo " << IP address $1 did not succesfully complete the telnet connection test >> "
+    	 # Output warning if telnet script did not populate mysql database fields.
+    	 echo " << IP address $1 did not succesfully complete the telnet connection test >> "
     	
-	# Clear IP address from database.   
-    	mysql $db -u$dbuser -p$dbpass -e "DELETE FROM $table WHERE IP_Address='$1';"
+	 # Clear IP address from database.   
+     	 mysql $db -u$dbuser -p$dbpass -e "DELETE FROM $table WHERE IP_Address='$1';"
 	
-    else
+     else
     
-    	# Add line to crontab to run e3systems.sh script every 5 minutes with IP address, username and password arguments.
-    	sudo sh -c "echo '*/5 * * * * $user \
-    	/home/$user/e3systems/e3systems.sh $1 $2 $3 $vessel' \
-    	>> /etc/crontab"
+    	 # Add line to crontab to run e3systems.sh script every 5 minutes with IP address, username and password arguments.
+    	 sudo sh -c "echo '*/5 * * * * $user \
+    	 /home/$user/e3systems/e3systems.sh $1 $2 $3 $vessel' \
+    	 >> /etc/crontab"
     
-	# Add line to crontab to run ipping.sh script command every minute with IP address arguments.
-    	sudo sh -c "echo '* * * * * $user \
-    	/home/$user/e3systems/scripts/ip_ping.sh $1; \
-    	sleep 30; \
-    	/home/$user/e3systems/scripts/ip_ping.sh $1' \
-    	>> /etc/crontab"
+	 # Add line to crontab to run ipping.sh script command every minute with IP address arguments.
+    	 sudo sh -c "echo '* * * * * $user \
+    	 /home/$user/e3systems/scripts/ip_ping.sh $1; \
+    	 sleep 30; \
+    	 /home/$user/e3systems/scripts/ip_ping.sh $1' \
+    	 >> /etc/crontab"
 
-    	# Ouput IP address added as crontab entry.
-    	echo "<< IP address $1 added to schedule >>"
-    	
-    fi
-  fi
-fi
+    	 # Ouput IP address added as crontab entry.
+      	 echo "<< IP address $1 added to schedule >>"
+     	
+     fi
+   fi
+ fi
 
 else
 
- echo "<< $1 is not a valid IP address >>"
+ echo "<< Invalid entry >> Correct usage: ip_add ipaddress username password vessel"
 
 fi
 
