@@ -7,11 +7,11 @@
 ###############################################################################################################################
 
 # Declare variables.
-user=""                                                # User scripts will run under.
+user="e3admin"                                                # User scripts will run under.
 db="e3db"                                              # MySQL database name.
 table="e3tb"                                           # MySQL table name.
-dbuser=""                                              # MySQL database username
-dbpass=""                                              # MySQL database password
+dbuser="e3admin"                                              # MySQL database username
+dbpass="E3System5!"                                              # MySQL database password
 outlog="/home/$user/e3systems/logs/output/"            # Output log file location.
 rawlog="/home/$user/e3systems/logs/raw/"               # Raw log file location.
 telnet="/home/$user/e3systems/scripts/ip_tel.sh"       # Telnet script location.
@@ -70,7 +70,7 @@ checkip=$(grep "$1" /var/www/html/map/map-global.html)
 if [ -z "$checkip" ] && [ -n "$lat" ] && [ -n "$long" ]; then
 
   # List Map locations
-  for loc in global eu us do
+  for loc in global eu us; do
   
     # Add markers to all maps.
     sed -i "s/<!-- START MAP MARKERS -->/<!-- START MAP MARKERS -->\n \
@@ -108,7 +108,7 @@ else
         fi
         
         # List Map locations
-        for loc in global eu us do
+        for loc in global eu us; do
         
           # update marker on all maps.
           sed -i "s/^var $4_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),});$ \
