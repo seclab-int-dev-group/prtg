@@ -61,10 +61,10 @@ Packet_loss='$pktloss', \
 Latitude='$lat', \
 Longitude='$long', \
 Rx_SNR='$rxsnr', \
-Rx_raw_reg='$rxrr', \
-Rx_raw_reg_lookup='$rxrrl', \
-Beam_Int='$beamint', \
-Beam_Str='$beamstr' \
+Rx_Raw_Reg='$rxrr', \
+Rx_Raw_Reg_Lookup='$rxrrl', \
+Beam_ID='$beamint', \
+Beam_Name='$beamstr' \
 WHERE IP_Address='$1';"
 
 # Check if IP address is set as a map marker and populate variable
