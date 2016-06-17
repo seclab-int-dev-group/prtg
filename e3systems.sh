@@ -7,14 +7,14 @@
 ###############################################################################################################################
 
 # Declare variables.
-user="e3admin"                                                # User scripts will run under.
-db="e3db"                                              # MySQL database name.
-table="e3tb"                                           # MySQL table name.
-dbuser="e3admin"                                              # MySQL database username
-dbpass="E3System5!"                                              # MySQL database password
-outlog="/home/$user/e3systems/logs/output/"            # Output log file location.
-rawlog="/home/$user/e3systems/logs/raw/"               # Raw log file location.
-telnet="/home/$user/e3systems/scripts/ip_tel.sh"       # Telnet script location.
+user="e3admin"                                        # User scripts will run under.
+db="e3db"                                             # MySQL database name.
+table="e3tb"                                          # MySQL table name.
+dbuser="e3admin"                                      # MySQL database username
+dbpass="E3System5!"                                   # MySQL database password
+outlog="/home/$user/e3systems/logs/output/"           # Output log file location.
+rawlog="/home/$user/e3systems/logs/raw/"              # Raw log file location.
+telnet="/home/$user/e3systems/scripts/ip_tel.sh"      # Telnet script location.
 
 ###############################################################################################################################
 
@@ -24,7 +24,7 @@ $telnet $1 $2 $3 | tee $rawlog/$1
 # Make log entry with IP address of modem.
 echo $1 > $outlog/$1
 
-# Grab latitude data from temporary file,populate variable named lat and make log entry.
+# Grab latitude data from temporary file, populate variable named lat and make log entry.
 lat=$( grep "latlong = " $rawlog/$1 | cut -d" " -f3-4 | sed 's/\r//g')
 grep "latlong = " $rawlog/$1 | cut -d" " -f3-4 | sed 's/\r//g' >> $outlog/$1
 
@@ -44,9 +44,11 @@ grep "Rx raw reg: " $rawlog/$1 | cut -d" " -f4 | sed 's/\r//g' >> $outlog/$1
 rxrrl=$( grep "Rx raw reg lookup: " $rawlog/$1 | cut -d" " -f5 | sed 's/\r//g' )
 grep "Rx raw reg lookup: " $rawlog/$1 | cut -d" " -f5 | sed 's/\r//g' >> $outlog/$1
 
-# Grab selected beam from temporary file, find corresponding beam, populate variable named beam and make log entry.
+# Grab selected beam Identifier from temporary file, populate variable named beam_Int and make log entry.
 beamint=$( grep " is currently selected" $rawlog/$1 | cut -d" " -f1 | sed 's/\r//g' )
 grep " is currently selected" $rawlog/$1 | cut -d" " -f1 | sed 's/\r//g' >> $outlog/$1
+
+# Grab selected beam name from temporary file, populate variable named beam_Str and make log entry.
 beamstr=$( grep "$beamint = " $rawlog/$1 | cut -d" " -f3-20 | sed 's/\r//g' )
 grep "$beamint = " $rawlog/$1 | cut -d" " -f3-20 | sed 's/\r//g' >> $outlog/$1
 
