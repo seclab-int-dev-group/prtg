@@ -15,7 +15,7 @@ dbpass="E3System5!"                                   # MySQL database password
 outlog="/home/$user/e3systems/logs/output/"           # Output log file location.
 rawlog="/home/$user/e3systems/logs/raw/"              # Raw log file location.
 telnet="/home/$user/e3systems/scripts/ip_tel.sh"      # Telnet script location.
-name=$(echo $4 | tr '[:lower:]' '[:upper:]' \		    	# Vessel name.
+name=$(echo $4 | tr '[:lower:]' '[:upper:]' \		    	  # Vessel name.
  | sed -e 's/_/ /g')
 
 ###############################################################################################################################
