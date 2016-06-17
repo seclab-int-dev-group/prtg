@@ -17,7 +17,7 @@ pinglog="/home/$user/e3systems/logs/ping"
 ###############################################################################################################################
 
 # Populate log file returned ping output.
-ping -c5 -t20 "$1" &> $pinglog/"$1"
+ping -c5 -t30 "$1" &> $pinglog/"$1"
 
 check=$(grep 'unknown host' $pinglog/"$1")
 check=$(grep '5 packets transmitted, ' $pinglog/"$1" | cut -d' ' -f3)
