@@ -7,17 +7,21 @@
 ###############################################################################################################################
 
 # Declare variables.
-user="e3admin"             # User that script will be executed under.
-db="e3db"           # MySQL database name.
-table="e3tb"        # MySQL table name.
-dbuser="e3admin"           # MySQL database username
-dbpass="E3System5!"           # MySQL database password
-cron=$(mysql $db -u$dbuser -p$dbpass -e "SELECT IP_Address FROM $table WHERE IP_Address='$1';" | grep -v 'IP_Address')
+user="e3admin"          					# User that script will be executed under.
+db="e3db"           						# MySQL database name.
+table="e3tb"        						# MySQL table name.
+dbuser="e3admin"           					# MySQL database username.
+dbpass="E3System5!"           					# MySQL database password.
+vessel=$(echo $4 | tr '[:upper:]' '[:lower:]' \			# Vessel name.
+ | sed -e 's/ /_/g')
+cron=$(mysql $db -u$dbuser -p$dbpass -e \			# Cronjob IP address.
+"SELECT IP_Address FROM $table WHERE IP_Address='$1';" \
+ | grep -v 'IP_Address')
 
 ###############################################################################################################################
 
 # Check if options are populated.
-if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ]; then
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -n "$5" ]; then
 
   # Output error if options are not populated.
   echo "<< Invalid entry >> Correct usage: ipadd [ipaddress] [username] [password] [vesselname]"
@@ -36,9 +40,15 @@ else
     mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
     $table (IP_Address) \
     VALUES ('$1');"
+    
+    # Insert vessel name into new row in mysql databse.
+    mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
+    $table (Vessel) \
+    VALUES ('$vessel') \
+    WHERE IP_Address="$1";"
 
     # Run main script once to test connection, credentials and populate database.
-    /home/$user/e3systems/e3systems.sh "$1" "$2" "$3" "$4"
+    /home/$user/e3systems/e3systems.sh "$1" "$2" "$3" "$vessel"
     
     # Run ping script once to test populate database with ping and packet loss data.
     /home/$user/e3systems/scripts/ip_ping.sh "$1"
@@ -58,7 +68,7 @@ else
     
     	# Add line to crontab to run e3systems.sh script every 5 minutes with IP address, username and password arguments.
     	sudo sh -c "echo '*/5 * * * * $user \
-    	/home/$user/e3systems/e3systems.sh $1 $2 $3 $4' \
+    	/home/$user/e3systems/e3systems.sh $1 $2 $3 $vessel' \
     	>> /etc/crontab"
     
 	# Add line to crontab to run ipping.sh script command every minute with IP address arguments.
