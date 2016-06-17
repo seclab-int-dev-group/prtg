@@ -8,11 +8,11 @@
 
 ###Description
 
-The system runs on a CentOS 7 server serving as a proxy data gathering server for PRTG Network Monitor connecting to each IP address added as a cronjob via telnet, gathering location, Signal and Beam data every 5 minutes as well as gathering ping and packet loss data every 30 seconds. Data pulled from each IP address is stored in a MYSQL database on the CentOS 7 server. Custom PRTG SSH sensors are used to pull the gathered data for each IP address from the MYSQL database and update the values, messages and control room map for each sensor on PRTG Network Monitor.
+The goal of this project is the constant monitoring of vessels connected via VSAT modems. This system runs on a minimal CentOS 7/Red Hat 7 configuration. It serves as a proxy data gathering server for PRTG Network Monitor, running cronjobs to connect to all added vessels via telnet. The cronjobs gather location, signal and beam data every 5 minutes as well as ping and packet loss data every 30 seconds. Data pulled from each vessel is stored in a MYSQL database on the CentOS 7/Red Hat 7 server, while maps are updated with markers based on current geolocation data of each vessel. Custom PRTG SSH sensors are used to pull the gathered data for each vessel from the MYSQL database and update the values, messages for each sensor on PRTG Network Monitor.
 
 ---
 <br>
-##CentOS 7 Server
+##CentOS 7/Red Hat 7 Server
 
 ###Project Files Location
 
