@@ -79,7 +79,7 @@ if [ -z "$checkip" ] && [ -n "$lat" ] && [ -n "$long" ]; then
     # Add markers to all maps.
     sed -i "s/<!-- START MAP MARKERS -->/<!-- START MAP MARKERS -->\n \
     <!-- START SET $1 -->\n \
-    var $4_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});\n \
+    var $4_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'markers/icon-green.png',});\n \
     $4_marker.setMap(map);\n \
     var $4_info = new google.maps.InfoWindow({content:\"$name\"});\n \
     google.maps.event.addListener($4_marker, \'click\', function() {$4_info.open(map,$4_marker);});\n \
@@ -116,7 +116,7 @@ else
         
           # update marker on all maps.
           sed -i "s/^var $4_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),});$ \
-          /var $4_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});/"  \
+          /var $4_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'markers/icon-green.png',});/"  \
           /var/www/html/map/map-$loc.html
           
         done
