@@ -17,6 +17,7 @@ dbpass=""           # MySQL database password
 # Create MYSQL database table.
 mysql $db -u$dbuser -p$dbpass -e "CREATE TABLE $table (\
 IP_Address VARCHAR(16) PRIMARY KEY, \
+Vessel VARCHAR(100), \
 Ping VARCHAR(50), \
 Packet_loss VARCHAR(50), \
 Latitude VARCHAR(50), \
