@@ -23,7 +23,7 @@ Project files are located inside ***/home/e3admin/e3systems/***
 ---
 ###Adding an IP Address
 
-Add a new IP address by running the following custom command: ***ip_add ipaddress username password***
+Add a new IP address by running the following custom command: ***ip_add ipaddress username password vessel***
 ![image02.jpg](images/image02.jpg)
 
 ---
