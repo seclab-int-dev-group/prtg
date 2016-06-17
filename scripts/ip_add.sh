@@ -38,13 +38,8 @@ if [[ $1 =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
  done
 
  # Check if options are populated.
- if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -n "$5" ] || [ $check -lt 4 ]; then
+ if [ -n "$1" ] || [ -n "$2" ] || [ -n "$3" ] || [ -n "$4" ] || [ -z "$5" ] || [ "$check" == 4 ]; then
 
-   # Output error if options are not populated.
-   echo "<< Invalid entry >> Correct usage: ip_add ipaddress username password vessel"
-
- else
-  
    # Check if IP address is already populated in schedule.
    if  [ "$cron" == "$1" ]; then
     
