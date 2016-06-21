@@ -33,6 +33,7 @@ while [ "$loop" = "yes" ]; do
       fi      
    done
    while [ -z $username ]; do
+      clear
       echo "<< ------------------------------------- >>"
       echo "<< -------- APPLICATION OPTIONS -------- >>"
       echo "<< ------------------------------------- >>"
@@ -47,6 +48,7 @@ while [ "$loop" = "yes" ]; do
       fi         
    done
    while [ -z $password ]; do
+      clear
       echo "<< ------------------------------------- >>"
       echo "<< -------- APPLICATION OPTIONS -------- >>"
       echo "<< ------------------------------------- >>"
@@ -60,30 +62,35 @@ while [ "$loop" = "yes" ]; do
          exit 4
       fi         
    done
-   clear
-   echo "--------------------------------"
-   echo "Vessel Name:         $vessel"
-   echo "Vessel IP Address:   $ipaddress"
-   echo "Vessel Username:     $username"
-   echo "Vessel Password:     $password"
-   echo "--------------------------------"
-   while [[ $yre != "confirm" || "retry" || "exit" ]]; do
-      read -p "Please enter \"confirm\" to confirm above entered information, \"retry\" to re-enter information or \"exit\" to exit the application without saving any information" yre
+   while [[ $yre != "yes" || "retry" || "exit" ]]; do
+      clear
+      echo "--------------------------------"
+      echo "Vessel Name:         $vessel"
+      echo "Vessel IP Address:   $ipaddress"
+      echo "Vessel Username:     $username"
+      echo "Vessel Password:     $password"
+      echo "--------------------------------"
+      read -p "Please enter \"yes\" to confirm above entered information, \"retry\" to re-enter information or \"exit\" to exit the application without saving any information" yre
    done
-   if [[ $yre == "confirm" || "exit" ]]; then
+   if [[ $yre == "yes" || "exit" ]]; then
       $loop="no"
    fi
-done
-
    case $yre in
       "yes")   counter=1 
                while [ $counter -le 4 ]; do
                   case "$counter" in
-                  1) ping -c5 -t30 "$ipaddress" &> /home/e3admin/e3systems/logs/ping/"$1"
-                     check=$(grep "unknown host" /home/e3admin/e3systems/logs/ping/"$1")
+                  1) ping -c5 -t30 "$ipaddress" &> /home/e3admin/e3systems/logs/ping/"$ipaddress"
+                     check=$(grep "unknown host" /home/e3admin/e3systems/logs/ping/"$ipaddress")
                      if [ -n "$check" ]; then
                         echo "<< PING TEST ERROR: Unknown host ($ipaddress) >>"
-                        exit 5
+                        read -p "Enter \"retry" to re-enter information or \"exit\" to exit the application" output
+                        if [ output = "retry" ]; then
+                           $loop="yes"
+                           rm -rf /home/e3admin/e3systems/logs/ping/"$ipaddress"
+                           counter=5
+                        else
+                           exit 5
+                        fi
                      fi
                      ;;
                   2) check=$(grep 'rtt' /home/e3admin/e3systems/logs/ping/"$1" | cut -d' ' -f2)
