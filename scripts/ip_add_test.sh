@@ -38,7 +38,7 @@ for i in {1..6}; do
       rxrrl=$( grep "Rx raw reg lookup: " /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f5 | sed 's/\r//g' )
       beamid=$( grep " is currently selected" /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f1 | sed 's/\r//g' )
       beamname=$( grep "$beamid = " /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f3-20 | sed 's/\r//g' )
-      if [ "$lat" -ne "*.*" ] && [ "$long" -ne "*.*" ]; then
+      if [[ "$lat" && "$long" == *.* ]]; then
          echo "<< ERROR: Unable to complete telnet session >>"
          exit 5
       fi
