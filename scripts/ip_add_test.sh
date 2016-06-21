@@ -1,5 +1,6 @@
 #!/bin/bash
-
+yre="retry"
+while [ "$yre" = "retry" ]; do
 read -p "Enter Vessel Name: " vessel
 read -p "Enter Vessel IP Address for $vessel: " ipaddress
 read -p "Enter Telnet Username for $vessel ($ipaddress): " username
@@ -10,8 +11,10 @@ echo "Vessel IP Address:   $ipaddress"
 echo "Vessel Username:     $username"
 echo "Vessel Password:     $password"
 echo "--------------------------------"
-read -p "Confirm Information and proceed? (yes/no): " yn
-case $yn in
+read -p "Please enter \"confirm\" to confirm above entered information, \"retry\" to re-enter information or \"exit\" to exit the application without saving any information" yre
+done
+while true; do
+case $yre in
    "yes")   counter=1 
             while [ $counter -le 6 ]; do
                case "$counter" in
@@ -88,5 +91,11 @@ case $yn in
                      ;;
                esac
             done
+            ;;
+   "exit")  exit 0
+            ;;
+   *)       echo "Please enter \"confirm\" to confirm above entered information, \"retry\" to re-enter information or \"exit\" to exit the application without saving any information"
+            ;;
 esac
+done
 exit 0
