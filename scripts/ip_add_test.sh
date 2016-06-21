@@ -38,24 +38,24 @@ for "i" in {1..4}; do
          exit 5
       fi
       ;;
-   6) mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
-      $table (IP_Address) \
-      VALUES (\'$1\');"
-      mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
-      $table (Vessel) \
-      VALUES ('$vessel') \
-      WHERE IP_Address=\"$1\";"
+   6) mysql e3db -ue3admin -pE3System5! -e "INSERT INTO \
+         e3tb (IP_Address) \
+         VALUES (\'$1\');"
+      mysql e3db -ue3admin -pE3System5! -e "INSERT INTO \
+         e3tb (Vessel) \
+         VALUES ('$vessel') \
+         WHERE IP_Address=\"$1\";"
       mysql e3db -ue3admin -pE3System5! -e "UPDATE e3tb SET \
-      Ping='$ping', \
-      Packet_loss='$pktloss', \
-      Latitude='$lat', \
-      Longitude='$long', \
-      Rx_SNR='$rxsnr', \
-      Rx_Raw_Reg='$rxrr', \
-      Rx_Raw_Reg_Lookup='$rxrrl', \
-      Beam_ID='$beamid', \
-      Beam_Name='$beamname' \
-      WHERE IP_Address='$1';"
+         Ping='$ping', \
+         Packet_loss='$pktloss', \
+         Latitude='$lat', \
+         Longitude='$long', \
+         Rx_SNR='$rxsnr', \
+         Rx_Raw_Reg='$rxrr', \
+         Rx_Raw_Reg_Lookup='$rxrrl', \
+         Beam_ID='$beamid', \
+         Beam_Name='$beamname' \
+         WHERE IP_Address='$1';"
       ;;
    esac
 done
