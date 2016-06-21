@@ -1,19 +1,80 @@
 #!/bin/bash
-yre="retry"
-while [ "$yre" = "retry" ]; do
-   read -p "Enter Vessel Name: " vessel
-   read -p "Enter Vessel IP Address for $vessel: " ipaddress
-   read -p "Enter Telnet Username for $vessel ($ipaddress): " username
-   read -p "Enter Telnet Password for $vessel ($ipaddress): " password
+loop="yes"
+while [ "$loop" = "yes" ]; do
+   clear
+   while [ -z $vessel ]; do
+      clear
+      echo "<< ------------------------------------- >>"
+      echo "<< -------- APPLICATION OPTIONS -------- >>"
+      echo "<< ------------------------------------- >>"
+      echo "<< 1) Leaving a blank input will prompt you to re-enter input >>"
+      echo "<< 2) Entering \"q!\" will exit the application without saving any information >>"
+      echo "<< ------------------------------------- >>"
+      echo "<< -------- APPLICATION OPTIONS -------- >>"
+      echo "<< ------------------------------------- >>"
+      read -p "Enter Vessel Name: " vessel
+      if [ $vessel = "q!"]; then
+         exit 0
+      fi
+   done
+   while [ -z $ipaddress ]; do
+      clear
+      echo "<< ------------------------------------- >>"
+      echo "<< -------- APPLICATION OPTIONS -------- >>"
+      echo "<< ------------------------------------- >>"
+      echo "<< 1) Leaving a blank input will prompt you to re-enter input >>"
+      echo "<< 2) Entering \"q!\" will exit the application without saving any information >>"
+      echo "<< ------------------------------------- >>"
+      echo "<< -------- APPLICATION OPTIONS -------- >>"
+      echo "<< ------------------------------------- >>"   
+      read -p "Enter Vessel IP Address for $vessel: " ipaddress
+      if [ $ipaddress = "q!"]; then
+         exit 0
+      fi      
+   done
+   while [ -z $username ]; do
+      echo "<< ------------------------------------- >>"
+      echo "<< -------- APPLICATION OPTIONS -------- >>"
+      echo "<< ------------------------------------- >>"
+      echo "<< 1) Leaving a blank input will prompt you to re-enter input >>"
+      echo "<< 2) Entering \"q!\" will exit the application without saving any information >>"
+      echo "<< ------------------------------------- >>"
+      echo "<< -------- APPLICATION OPTIONS -------- >>"
+      echo "<< ------------------------------------- >>"      
+      read -p "Enter Telnet Username for $vessel ($ipaddress): " username
+      if [ $username = "q!"]; then
+         exit 0
+      fi         
+   done
+   while [ -z $password ]; do
+      echo "<< ------------------------------------- >>"
+      echo "<< -------- APPLICATION OPTIONS -------- >>"
+      echo "<< ------------------------------------- >>"
+      echo "<< 1) Leaving a blank input will prompt you to re-enter input >>"
+      echo "<< 2) Entering \"q!\" will exit the application without saving any information >>"
+      echo "<< ------------------------------------- >>"
+      echo "<< -------- APPLICATION OPTIONS -------- >>"
+      echo "<< ------------------------------------- >>"      
+      read -p "Enter Telnet Password for $vessel ($ipaddress): " password
+      if [ $password = "q!"]; then
+         exit 0
+      fi         
+   done
+   clear
    echo "--------------------------------"
    echo "Vessel Name:         $vessel"
    echo "Vessel IP Address:   $ipaddress"
    echo "Vessel Username:     $username"
    echo "Vessel Password:     $password"
    echo "--------------------------------"
-   read -p "Please enter \"confirm\" to confirm above entered information, \"retry\" to re-enter information or \"exit\" to exit the application without saving any information" yre
+   while [[ $yre != "confirm" || "retry" || "exit" ]]; do
+      read -p "Please enter \"confirm\" to confirm above entered information, \"retry\" to re-enter information or \"exit\" to exit the application without saving any information" yre
+   done
+   if [[ $yre == "confirm" || "exit" ]]; then
+      $loop="no"
+   fi
 done
-while true; do
+
    case $yre in
       "yes")   counter=1 
                while [ $counter -le 6 ]; do
@@ -93,8 +154,6 @@ while true; do
                done
                ;;
       "exit")  exit 0
-               ;;
-      *)       echo "Please enter \"confirm\" to confirm above entered information, \"retry\" to re-enter information or \"exit\" to exit the application without saving any information"
                ;;
    esac
 done
