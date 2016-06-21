@@ -14,7 +14,7 @@ while [ "$loop" = "yes" ]; do
       echo "<< ------------------------------------- >>"
       read -p "Enter Vessel Name: " vessel
       if [ $vessel = "q!"]; then
-         exit 0
+         exit 1
       fi
    done
    while [ -z $ipaddress ]; do
@@ -29,7 +29,7 @@ while [ "$loop" = "yes" ]; do
       echo "<< ------------------------------------- >>"   
       read -p "Enter Vessel IP Address for $vessel: " ipaddress
       if [ $ipaddress = "q!"]; then
-         exit 0
+         exit 2
       fi      
    done
    while [ -z $username ]; do
@@ -43,7 +43,7 @@ while [ "$loop" = "yes" ]; do
       echo "<< ------------------------------------- >>"      
       read -p "Enter Telnet Username for $vessel ($ipaddress): " username
       if [ $username = "q!"]; then
-         exit 0
+         exit 3
       fi         
    done
    while [ -z $password ]; do
@@ -57,7 +57,7 @@ while [ "$loop" = "yes" ]; do
       echo "<< ------------------------------------- >>"      
       read -p "Enter Telnet Password for $vessel ($ipaddress): " password
       if [ $password = "q!"]; then
-         exit 0
+         exit 4
       fi         
    done
    clear
@@ -77,29 +77,19 @@ done
 
    case $yre in
       "yes")   counter=1 
-               while [ $counter -le 6 ]; do
+               while [ $counter -le 4 ]; do
                   case "$counter" in
-                  1) if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ]; then
-                        echo "<< ERROR: One of more paramaters are empty. USAGE: ip_add ipaddress username password vessel >>"
-                        exit 1
-                     fi
-                     ;;
-                  2) if [ -n "$5" ]; then
-                        echo "<< ERROR: Spaces found in vessel paramater. Please use underscores >>"
-                        exit 2
-                     fi
-                     ;;
-                  3) ping -c5 -t30 "$1" &> /home/e3admin/e3systems/logs/ping/"$1"
+                  1) ping -c5 -t30 "$ipaddress" &> /home/e3admin/e3systems/logs/ping/"$1"
                      check=$(grep "unknown host" /home/e3admin/e3systems/logs/ping/"$1")
                      if [ -n "$check" ]; then
-                        echo "<< ERROR: IP address is not correct >>"
-                        exit 3
+                        echo "<< PING TEST ERROR: Unknown host ($ipaddress) >>"
+                        exit 5
                      fi
                      ;;
-                  4) check=$(grep 'rtt' /home/e3admin/e3systems/logs/ping/"$1" | cut -d' ' -f2)
+                  2) check=$(grep 'rtt' /home/e3admin/e3systems/logs/ping/"$1" | cut -d' ' -f2)
                      if [ -z "$check" ]; then
-                        echo "<< ERROR: Ping Timeout. Unable to reach IP address >>"
-                        exit 4
+                        echo "<< PING TEST ERROR: Timeout ($ipaddress) >>"
+                        exit 6
                      else
                         pingmin=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/rtt min\/avg\/max\/mdev = //")
                         pingavg=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d'/' -f5 | sed 's/ ms//g')
@@ -107,7 +97,7 @@ done
                         pktloss=$(grep 'packet loss' /home/e3admin/e3systems/logs/ping/"$1" | cut -d' ' -f6 | sed 's/%//g')
                      fi
                      ;;
-                  5) /home/e3admin/e3systems/scripts/ip_tel.sh "$1" "$2" "$3" | tee /home/e3admin/e3systems/logs/raw/"$1"
+                  3) /home/e3admin/e3systems/scripts/ip_tel.sh "$1" "$2" "$3" | tee /home/e3admin/e3systems/logs/raw/"$1"
                      lat=$( grep "latlong = " /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f3-4 | sed 's/\r//g')
                      long=$( grep "latlong = " /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f5-6 | sed 's/\r//g' )
                      rxsnr=$( grep "Rx SNR: " /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f3 | sed 's/\r//g' )
@@ -116,11 +106,11 @@ done
                      beamid=$( grep " is currently selected" /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f1 | sed 's/\r//g' )
                      beamname=$( grep "$beamid = " /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f3-20 | sed 's/\r//g' )
                      if [[ "$lat" && "$long" != *.* ]]; then
-                        echo "<< ERROR: Unable to complete telnet session >>"
-                        exit 5
+                        echo "<< TELNET TEST ERROR: Session failed ($ipaddress) >>"
+                        exit 7
                      fi
                      ;;
-                  6) case "$lat" in
+                  4) case "$lat" in
                      N) lat="${lat/ N//}"
                         ;;
                      S) lat=-"${lat/ S//}"
@@ -153,7 +143,7 @@ done
                   esac
                done
                ;;
-      "exit")  exit 0
+      "exit")  exit 8
                ;;
    esac
 done
