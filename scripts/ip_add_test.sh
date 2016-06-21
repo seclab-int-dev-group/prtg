@@ -54,15 +54,15 @@ for i in {1..6}; do
       fi
       ;;
    6) case "$lat" in
-      N) lat=${lat/ N//}
+      N) lat="${lat/ N//}"
          ;;
-      S) lat=-${lat/ S//}
+      S) lat=-"${lat/ S//}"
          ;;
       esac
       case "$long" in
-      E) long=${long/ E//}
+      E) long="${long/ E//}"
          ;;
-      W) long=-${long/ W//}
+      W) long=-"${long/ W//}"
          ;;
       esac
       mysql e3db -ue3admin -pE3System5! -e "INSERT INTO \
