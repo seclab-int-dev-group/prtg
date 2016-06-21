@@ -21,13 +21,41 @@ for "i" in {1..4}; do
       ;;
    4) check=$(grep "5 packets transmitted, " /home/e3admin/e3systems/logs/ping/"$1" | cut -d" " -f3)
       if [ $check="0" ]; then
-        echo "<< ERROR: Ping Timeout. IP address is possibly offline >>"
+        echo "<< ERROR: Ping Timeout. Unable to reach IP address >>"
         exit 4
       fi
       ;;
-   5) 
+   5) /home/e3admin/e3systems/scripts/ip_tel.sh "$1" "$2" "$3" | tee /home/$user/e3systems/logs/raw/"$1"
+      lat=$( grep "latlong = " $rawlog/$1 | cut -d" " -f3-4 | sed 's/\r//g')
+      long=$( grep "latlong = " $rawlog/$1 | cut -d" " -f5-6 | sed 's/\r//g' )
+      rxsnr=$( grep "Rx SNR: " $rawlog/$1 | cut -d" " -f3 | sed 's/\r//g' )
+      rxrr=$( grep "Rx raw reg: " $rawlog/$1 | cut -d" " -f4 | sed 's/\r//g' )
+      rxrrl=$( grep "Rx raw reg lookup: " $rawlog/$1 | cut -d" " -f5 | sed 's/\r//g' )
+      beamid=$( grep " is currently selected" $rawlog/$1 | cut -d" " -f1 | sed 's/\r//g' )
+      beamname=$( grep "$beamid = " $rawlog/$1 | cut -d" " -f3-20 | sed 's/\r//g' )
+      if [ "$lat" -ne "*.*" ] && [ "$long" -ne "*.*" ]; then
+         echo "<< ERROR: Unable to complete telnet session >>"
+         exit 5
+      fi
       ;;
-   *) echo "Signal number $1 is not processed"
+   6) mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
+      $table (IP_Address) \
+      VALUES (\'$1\');"
+      mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
+      $table (Vessel) \
+      VALUES ('$vessel') \
+      WHERE IP_Address=\"$1\";"
+      mysql e3db -ue3admin -pE3System5! -e "UPDATE e3tb SET \
+      Ping='$ping', \
+      Packet_loss='$pktloss', \
+      Latitude='$lat', \
+      Longitude='$long', \
+      Rx_SNR='$rxsnr', \
+      Rx_Raw_Reg='$rxrr', \
+      Rx_Raw_Reg_Lookup='$rxrrl', \
+      Beam_ID='$beamid', \
+      Beam_Name='$beamname' \
+      WHERE IP_Address='$1';"
       ;;
    esac
 done
