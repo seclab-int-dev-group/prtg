@@ -1,7 +1,8 @@
 #!/bin/bash
 
-for i in {1..6}; do
-   case "$i" in
+counter=1 
+while [ $counter -le 6 ]; do
+   case "$counter" in
    1) if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ]; then
          echo "<< ERROR: One of more paramaters are empty. USAGE: ip_add ipaddress username password vessel >>"
          exit 1
