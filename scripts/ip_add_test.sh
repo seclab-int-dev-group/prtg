@@ -19,14 +19,14 @@ for i in {1..6}; do
          exit 3
       fi
       ;;
-   4) check=$(grep '5 packets transmitted, ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d' ' -f3)
-      if [ "$check" = "0" ]; then
+   4) check=$(grep 'rtt' /home/e3admin/e3systems/logs/ping/"$1" | cut -d' ' -f2)
+      if [ -z "$check" ]; then
          echo "<< ERROR: Ping Timeout. Unable to reach IP address >>"
          exit 4
       else
+         pingmin=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/rtt min\/avg\/max\/mdev = //")
          pingavg=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d'/' -f5 | sed 's/ ms//g')
-         pingmin=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d'/' -f6 | sed 's/ ms//g')
-         pingmax=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d'/' -f7 | sed 's/ ms//g')
+         pingmax=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d'/' -f6 | sed 's/ ms//g')
          pktloss=$(grep 'packet loss' /home/e3admin/e3systems/logs/ping/"$1" | cut -d' ' -f6 | sed 's/%//g')
       fi
       ;;
@@ -60,8 +60,8 @@ for i in {1..6}; do
          VALUES (\'$1\');"
       mysql e3db -ue3admin -pE3System5! -e "UPDATE e3tb SET \
          Vessel='$(echo "$4" | tr '[:upper:]' '[:lower:]' | sed "s/-/_/g")', \
-         Ping_Avg='$pingavg', \
          Ping_Min='$pingmin', \
+         Ping_Avg='$pingavg', \
          Ping_Max='$pingmax', \
          Packet_Loss='$pktloss', \
          Latitude='$lat', \
