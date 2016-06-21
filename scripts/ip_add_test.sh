@@ -76,4 +76,4 @@ for "i" in {1..4}; do
    esac
 done
 
-exit
+exit 0
