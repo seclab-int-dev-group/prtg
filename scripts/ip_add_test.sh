@@ -24,7 +24,9 @@ for "i" in {1..4}; do
          echo "<< ERROR: Ping Timeout. Unable to reach IP address >>"
          exit 4
       else
-         ping=$(grep 'rtt min/avg/max/mdev = ' $pinglog/"$1" | cut -d'/' -f5 | sed 's/ ms//g')
+         pingavg=$(grep 'rtt min/avg/max/mdev = ' $pinglog/"$1" | cut -d'/' -f5 | sed 's/ ms//g')
+         pingmin=$(grep 'rtt min/avg/max/mdev = ' $pinglog/"$1" | cut -d'/' -f6 | sed 's/ ms//g')
+         pingmax=$(grep 'rtt min/avg/max/mdev = ' $pinglog/"$1" | cut -d'/' -f7 | sed 's/ ms//g')
          pktloss=$(grep 'packet loss' $pinglog/"$1" | cut -d' ' -f6 | sed 's/%//g')
       fi
       ;;
@@ -56,13 +58,12 @@ for "i" in {1..4}; do
       mysql e3db -ue3admin -pE3System5! -e "INSERT INTO \
          e3tb (IP_Address) \
          VALUES (\'$1\');"
-      mysql e3db -ue3admin -pE3System5! -e "INSERT INTO \
-         e3tb (Vessel) \
-         VALUES ('$(echo "$4" | tr '[:upper:]' '[:lower:]' | sed "s/-/_/g")') \
-         WHERE IP_Address=\"$1\";"
       mysql e3db -ue3admin -pE3System5! -e "UPDATE e3tb SET \
-         Ping='$ping', \
-         Packet_loss='$pktloss', \
+         Vessel='$(echo "$4" | tr '[:upper:]' '[:lower:]' | sed "s/-/_/g")', \
+         Ping_Avg='$pingavg', \
+         Ping_Min='$pingmin', \
+         Ping_Max='$pingmax', \
+         Packet_Loss='$pktloss', \
          Latitude='$lat', \
          Longitude='$long', \
          Rx_SNR='$rxsnr', \
