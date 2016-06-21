@@ -24,10 +24,10 @@ for "i" in {1..4}; do
          echo "<< ERROR: Ping Timeout. Unable to reach IP address >>"
          exit 4
       else
-         pingavg=$(grep 'rtt min/avg/max/mdev = ' $pinglog/"$1" | cut -d'/' -f5 | sed 's/ ms//g')
-         pingmin=$(grep 'rtt min/avg/max/mdev = ' $pinglog/"$1" | cut -d'/' -f6 | sed 's/ ms//g')
-         pingmax=$(grep 'rtt min/avg/max/mdev = ' $pinglog/"$1" | cut -d'/' -f7 | sed 's/ ms//g')
-         pktloss=$(grep 'packet loss' $pinglog/"$1" | cut -d' ' -f6 | sed 's/%//g')
+         pingavg=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d'/' -f5 | sed 's/ ms//g')
+         pingmin=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d'/' -f6 | sed 's/ ms//g')
+         pingmax=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d'/' -f7 | sed 's/ ms//g')
+         pktloss=$(grep 'packet loss' /home/e3admin/e3systems/logs/ping/"$1" | cut -d' ' -f6 | sed 's/%//g')
       fi
       ;;
    5) /home/e3admin/e3systems/scripts/ip_tel.sh "$1" "$2" "$3" | tee /home/$user/e3systems/logs/raw/"$1"
