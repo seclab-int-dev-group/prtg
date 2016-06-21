@@ -43,7 +43,7 @@ for "i" in {1..4}; do
          VALUES (\'$1\');"
       mysql e3db -ue3admin -pE3System5! -e "INSERT INTO \
          e3tb (Vessel) \
-         VALUES ('$vessel') \
+         VALUES ('$(echo "$4" | tr '[:upper:]' '[:lower:]')') \
          WHERE IP_Address=\"$1\";"
       mysql e3db -ue3admin -pE3System5! -e "UPDATE e3tb SET \
          Ping='$ping', \
