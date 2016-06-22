@@ -192,7 +192,7 @@ while [ "$loop" = "yes" ]; do
                         e3tb (IP_Address) \
                         VALUES (\'$1\');"
                      mysql e3db -ue3admin -pE3System5! -e "UPDATE e3tb SET \
-                        Vessel='$(echo "$4" | tr '[:upper:]' '[:lower:]' | sed "s/-/_/g" | sed "s/ /_/g")', \
+                        Vessel='$(echo "$vessel" | tr '[:upper:]' '[:lower:]' | sed "s/-/_/g" | sed "s/ /_/g")', \
                         Ping_Min='$pingmin', \
                         Ping_Avg='$pingavg', \
                         Ping_Max='$pingmax', \
@@ -204,7 +204,7 @@ while [ "$loop" = "yes" ]; do
                         Rx_Raw_Reg_Lookup='$rxrrl', \
                         Beam_ID='$beamid', \
                         Beam_Name='$beamname' \
-                        WHERE IP_Address='$1';"
+                        WHERE IP_Address='$ipaddress';"
                         ;;
                   esac
                done
