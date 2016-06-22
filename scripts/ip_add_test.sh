@@ -92,6 +92,7 @@ while [ "$loop" = "yes" ]; do
                               rm -rf /home/e3admin/e3systems/logs/ping/"$ipaddress"
                               counter=5
                            else
+                              rm -rf /home/e3admin/e3systems/logs/ping/"$ipaddress"
                               exit 5
                            fi
                         done
@@ -126,7 +127,8 @@ while [ "$loop" = "yes" ]; do
                                     rm -rf /home/e3admin/e3systems/logs/ping/"$ipaddress"
                                     counter=5
                                     ;;
-                           "exit")  exit 6         
+                           "exit")  rm -rf /home/e3admin/e3systems/logs/ping/"$ipaddress"
+                                    exit 6         
                            esac         
                         done
                      else
@@ -168,10 +170,11 @@ while [ "$loop" = "yes" ]; do
                                        WHERE IP_Address='$ipaddress';"                                       
                                     ;;
                            "retry") $loop="yes"
-                                    rm -rf /home/e3admin/e3systems/logs/ping/"$ipaddress"
+                                    rm -rf /home/e3admin/e3systems/logs/raw/"$ipaddress"
                                     counter=5
                                     ;;
-                           "exit")  exit 7         
+                           "exit")  rm -rf /home/e3admin/e3systems/logs/raw/"$ipaddress"
+                                    exit 7         
                            esac                                 
                         fi
                      done   
