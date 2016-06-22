@@ -74,6 +74,7 @@ while [ "$loop" = "yes" ]; do
    done
    if [[ $yre == "yes" || "exit" ]]; then
       $loop="no"
+      clear
    fi
    case $yre in
       "yes")   counter=1 
@@ -82,21 +83,52 @@ while [ "$loop" = "yes" ]; do
                   1) ping -c5 -t30 "$ipaddress" &> /home/e3admin/e3systems/logs/ping/"$ipaddress"
                      check=$(grep "unknown host" /home/e3admin/e3systems/logs/ping/"$ipaddress")
                      if [ -n "$check" ]; then
-                        echo "<< PING TEST ERROR: Unknown host ($ipaddress) >>"
-                        read -p "Enter \"retry" to re-enter information or \"exit\" to exit the application" output
-                        if [ output = "retry" ]; then
-                           $loop="yes"
-                           rm -rf /home/e3admin/e3systems/logs/ping/"$ipaddress"
-                           counter=5
-                        else
-                           exit 5
-                        fi
+                        while [[ $output1 != "retry" || "exit" ]]; do
+                           clear
+                           echo "<< PING TEST ERROR: Unknown host ($ipaddress) >>"
+                           read -p "Enter \"retry\" to re-enter information or \"exit\" to exit the application" output1
+                           if [ output1 = "retry" ]; then
+                              $loop="yes"
+                              rm -rf /home/e3admin/e3systems/logs/ping/"$ipaddress"
+                              counter=5
+                           else
+                              exit 5
+                           fi
+                        done
                      fi
                      ;;
                   2) check=$(grep 'rtt' /home/e3admin/e3systems/logs/ping/"$1" | cut -d' ' -f2)
                      if [ -z "$check" ]; then
-                        echo "<< PING TEST ERROR: Timeout ($ipaddress) >>"
-                        exit 6
+                        while [[ $output2 != "save" || "retry" || "exit" ]]; do
+                           clear
+                           echo "<< PING TEST ERROR: Timeout ($ipaddress) >>"
+                           read -p "Enter \"save\" to save information anyways, \"retry\" to re-enter information or \"exit\" to exit the application" output2                        
+                           case "output2" in
+                           "save")  mysql e3db -ue3admin -pE3System5! -e "INSERT INTO \
+                                       e3tb (IP_Address) \
+                                       VALUES (\'$ipaddress\');"
+                                    mysql e3db -ue3admin -pE3System5! -e "UPDATE e3tb SET \
+                                       Vessel='$(echo "$vessel" | tr '[:upper:]' '[:lower:]' | sed "s/-/_/g" | sed "s/ /_/g")', \
+                                       Ping_Min='ERROR', \
+                                       Ping_Avg='ERROR', \
+                                       Ping_Max='ERROR', \
+                                       Packet_Loss='ERROR', \
+                                       Latitude='ERROR', \
+                                       Longitude='ERROR', \
+                                       Rx_SNR='ERROR', \
+                                       Rx_Raw_Reg='ERROR', \
+                                       Rx_Raw_Reg_Lookup='ERROR', \
+                                       Beam_ID='ERROR', \
+                                       Beam_Name='ERROR' \
+                                       WHERE IP_Address='$ipaddress';"                                       
+                                    ;;
+                           "retry") $loop="yes"
+                                    rm -rf /home/e3admin/e3systems/logs/ping/"$ipaddress"
+                                    counter=5
+                                    ;;
+                           "exit")  exit 6         
+                           esac         
+                        done
                      else
                         pingmin=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/rtt min\/avg\/max\/mdev = //")
                         pingavg=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$1" | cut -d'/' -f5 | sed 's/ ms//g')
@@ -112,10 +144,37 @@ while [ "$loop" = "yes" ]; do
                      rxrrl=$( grep "Rx raw reg lookup: " /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f5 | sed 's/\r//g' )
                      beamid=$( grep " is currently selected" /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f1 | sed 's/\r//g' )
                      beamname=$( grep "$beamid = " /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f3-20 | sed 's/\r//g' )
-                     if [[ "$lat" && "$long" != *.* ]]; then
-                        echo "<< TELNET TEST ERROR: Session failed ($ipaddress) >>"
-                        exit 7
-                     fi
+                     while [[ $output3 != "save" || "retry" || "exit" ]]; do
+                        if [[ "$lat" && "$long" != *.* ]]; then
+                           echo "<< TELNET TEST ERROR: Session failed ($ipaddress) >>"
+                           read -p "Enter \"save\" to save information anyways, \"retry\" to re-enter information or \"exit\" to exit the application" output3
+                           case "output3" in
+                           "save")  mysql e3db -ue3admin -pE3System5! -e "INSERT INTO \
+                                       e3tb (IP_Address) \
+                                       VALUES (\'$ipaddress\');"
+                                    mysql e3db -ue3admin -pE3System5! -e "UPDATE e3tb SET \
+                                       Vessel='$(echo "$vessel" | tr '[:upper:]' '[:lower:]' | sed "s/-/_/g" | sed "s/ /_/g")', \
+                                       Ping_Min='ERROR', \
+                                       Ping_Avg='ERROR', \
+                                       Ping_Max='ERROR', \
+                                       Packet_Loss='ERROR', \
+                                       Latitude='ERROR', \
+                                       Longitude='ERROR', \
+                                       Rx_SNR='ERROR', \
+                                       Rx_Raw_Reg='ERROR', \
+                                       Rx_Raw_Reg_Lookup='ERROR', \
+                                       Beam_ID='ERROR', \
+                                       Beam_Name='ERROR' \
+                                       WHERE IP_Address='$ipaddress';"                                       
+                                    ;;
+                           "retry") $loop="yes"
+                                    rm -rf /home/e3admin/e3systems/logs/ping/"$ipaddress"
+                                    counter=5
+                                    ;;
+                           "exit")  exit 7         
+                           esac                                 
+                        fi
+                     done   
                      ;;
                   4) case "$lat" in
                      N) lat="${lat/ N//}"
