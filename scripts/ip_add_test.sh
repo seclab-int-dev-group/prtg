@@ -136,7 +136,7 @@ while [ "$loop" = "yes" ]; do
                         pktloss=$(grep 'packet loss' /home/e3admin/e3systems/logs/ping/"$1" | cut -d' ' -f6 | sed 's/%//g')
                      fi
                      ;;
-                  3) /home/e3admin/e3systems/scripts/ip_tel.sh "$1" "$2" "$3" | tee /home/e3admin/e3systems/logs/raw/"$1"
+                  3) /home/e3admin/e3systems/scripts/ip_tel.sh "$ipaddress" "$username" "$password" | tee /home/e3admin/e3systems/logs/raw/"$1"
                      lat=$( grep "latlong = " /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f3-4 | sed 's/\r//g')
                      long=$( grep "latlong = " /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f5-6 | sed 's/\r//g' )
                      rxsnr=$( grep "Rx SNR: " /home/e3admin/e3systems/logs/raw/"$1" | cut -d" " -f3 | sed 's/\r//g' )
