@@ -190,7 +190,7 @@ while [ "$loop" = "yes" ]; do
                      esac
                      mysql e3db -ue3admin -pE3System5! -e "INSERT INTO \
                         e3tb (IP_Address) \
-                        VALUES (\'$1\');"
+                        VALUES (\'$ipaddress\');"
                      mysql e3db -ue3admin -pE3System5! -e "UPDATE e3tb SET \
                         Vessel='$(echo "$vessel" | tr '[:upper:]' '[:lower:]' | sed "s/-/_/g" | sed "s/ /_/g")', \
                         Ping_Min='$pingmin', \
