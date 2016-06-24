@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Input function for adding vessels
+input(){
+# Run while loop until input variable is populated
+while [ -z $input ] ; do
+        clear
+        # Prompt for input
+        read -p "Enter $1: " input
+        # Run case statement based on input variable
+        case "$input" in
+        # Remove log file and quit loop if "q" is entered
+        q)      rm -f test.txt
+                break
+                ;;
+        # Display warning if input is left blank and prompt to re-enter input
+        '')     clear
+                read -p "Empty Input. Press Enter to Continue..."
+                ;;
+        # Add entered input into log file and quit loop
+        *)      echo "$input" >> test.txt
+                input=""
+                break
+                ;;
+        esac
+done
+}
+# Main function of script
+main(){
+# Remove log file
+rm -f test.txt
+# Create input prompts from strings entered in for loop
+for string in "Vessel" "IP Address" "Username" "Password"; do
+        input "$string"
+done
+}
+# Run main function
+main
+exit 0
