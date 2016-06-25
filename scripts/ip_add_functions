@@ -1,6 +1,7 @@
 #!/bin/bash
 # Check IP address validity function
 check_ip(){
+        echo "checking IP Address validity. Please wait..."
         return=$(ping -c1 "$input" &> /dev/null; echo "$?")
 }
 # Log input function
