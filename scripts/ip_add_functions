@@ -39,8 +39,14 @@ while [ -z $input ] ; do
                         check_ip
                         case "$return" in
                         # Add entered input into log file and quit loop if IP address is valid and successfully pinged
-                        val)    log_input "$string"
-                                ;;
+                        val)    check_ping
+                                case "$return" in
+                                0)      log_input "$string"
+                                        ;;
+                                1)      clear
+                                        read -p "Could not reach IP address. Continue anyways? (y/n): " yn
+                                        ;;
+                                esac
                         # Display warning and prompt to save or re-enter input if IP address could not be pinged        
                         inv)    clear
                                 read -p "Invalid input. Press Enter to Continue..."
