@@ -8,13 +8,13 @@ telnet_test(){
 # Check IP address validity function
 check_ip(){
         clear
-        echo "Checking IP Address validity. Please wait..."
+        echo "Running validity test on IP Address \"$input\". Please wait..."
         return=$(ipcalc -cs4 "$input" && echo val || echo inv)
 }
 # Ping IP address function
 check_ping(){
         clear
-        echo "Running ping check. Please wait..."
+        echo "Running ping check on IP Address \"$input\". Please wait..."
         return=$(ping -c1 -W5 "$input" &> /dev/null; echo "$?")
 }
 # Log input function
@@ -37,7 +37,7 @@ while [ -z "$input" ] ; do
                 ;;
         # Display warning if input is left blank and prompt to re-enter input
         '')     clear
-                read -p "Empty Input. Press Enter to Continue..."
+                read -p "Input is empty. Press Enter to Continue..."
                 ;;
         # Run check_ip function when IP address input is required
         *)      if [ "$1" = "IP Address" ]; then
@@ -53,7 +53,7 @@ while [ -z "$input" ] ; do
                                 1)      unset yn
                                         while [ -z "$yn" ]; do
                                                 clear
-                                                read -p "Could not reach IP address. Continue anyways? (y/n): " yn
+                                                read -p "Could not reach IP address \"$input\". Continue anyways? (y/n): " yn
                                                 case "$yn" in
                                                 y)      ipaddress="$input"
                                                         log_input "$string"
@@ -61,7 +61,8 @@ while [ -z "$input" ] ; do
                                                         ;;
                                                 n)      unset input
                                                         ;;
-                                                *)      unset yn
+                                                *)      clear
+                                                        unset yn
                                                         read -p "Invalid input. Press Enter to Continue..."  
                                                         ;;
                                                 esac
@@ -72,7 +73,7 @@ while [ -z "$input" ] ; do
                         # Display warning and prompt to save or re-enter input if IP address could not be pinged        
                         inv)    unset input
                                 clear
-                                read -p "Invalid input. Press Enter to Continue..."
+                                read -p "\"$input\" is not a valid IP Address. Press Enter to Continue..."
                                 ;;
                         esac
                 # Skip checking IP address, add entered input into log file and quit loop 
