@@ -1,4 +1,9 @@
 #!/bin/bash
+
+#telnet_test(){
+#        ipaddr=$(/home/e3admin/e3systems/logs/ping/)
+#}
+
 # Check IP address validity function
 check_ip(){
         clear
@@ -13,7 +18,7 @@ check_ping(){
 }
 # Log input function
 log_input(){
-        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> test.txt
+        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> logs/output/"$ipaddr".log
         unset input
 }
 # Input function for adding vessels
@@ -40,7 +45,8 @@ while [ -z "$input" ] ; do
                         # Add entered input into log file and quit loop if IP address is valid and successfully pinged
                         val)    check_ping
                                 case "$return" in
-                                0)      log_input "$string"
+                                0)      ipaddr="$input"
+                                        log_input "$string"
                                         break
                                         ;;
                                 1)      unset yn
@@ -48,7 +54,8 @@ while [ -z "$input" ] ; do
                                                 clear
                                                 read -p "Could not reach IP address. Continue anyways? (y/n): " yn
                                                 case "$yn" in
-                                                y)      log_input "$string"
+                                                y)      ipaddr="$input"
+                                                        log_input "$string"
                                                         break 2
                                                         ;;
                                                 n)      unset input
@@ -81,7 +88,7 @@ main(){
 # Remove log file
 rm -f test.txt
 # Create input prompts from strings entered in for loop
-for string in "Vessel" "IP Address" "Username" "Password"; do
+for string in "IP Address" "Username" "Password" "Vessel Name"; do
         input "$string"
 done
 }
