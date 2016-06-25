@@ -1,7 +1,14 @@
 #!/bin/bash
+
+check_ping(){
+        
+}
+
 # Check IP address validity function
 check_ip(){
-        return=$(ipcalc -cs4 $input && echo val || echo inv)
+        # return=$(ipcalc -cs4 $input && echo val || echo inv)
+        $ return=$(ping -c1 "$input" &> /dev/null; echo $?)
+
 }
 # Log input function
 log_input(){
@@ -30,13 +37,25 @@ while [ -z $input ] ; do
         *)      if [ $1 = "IP Address" ]; then
                         check_ip
                         case "$return" in
-                        # Display Warning and prompt to re-enter input if IP address is invalid
-                        inv)    clear
+                        # Add entered input into log file and quit loop if IP address is valid and successfully pinged
+                        0)      log_input
+                                ;;
+                        # Display warning and prompt to save or re-enter input if IP address could not be pinged        
+                        1)      clear
+                                read -p "Could not reach IP address. Continue anyways? (y/n): " yn
+                                case "$yn" in
+                                y)      log_input
+                                        ;;
+                                n)      break
+                                        ;;
+                                *)      clear
+                                        read -p "Invalid input. Press Enter to Continue..."
+                                        ;;
+                        # Display warning and prompt to re-enter input if IP address is invalid
+                        2)      clear
                                 read -p "Invalid IP address. Press Enter to Continue..."
                                 ;;
-                        # Add entered input into log file and quit loop if IP address is valid
-                        val)    log_input
-                                ;;
+
                         esac
                 # Skip checking IP address, add entered input into log file and quit loop 
                 else
