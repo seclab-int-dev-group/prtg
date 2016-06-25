@@ -19,7 +19,7 @@ log_input(){
 # Input function for adding vessels
 input(){
 # Run while loop until input variable is populated
-while [ -z $input ] ; do
+while [ -z "$input" ] ; do
         clear
         # Prompt for input
         read -p "Enter $1: " input
