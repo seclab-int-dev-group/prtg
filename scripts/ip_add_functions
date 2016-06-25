@@ -26,15 +26,18 @@ while [ -z $input ] ; do
         '')     clear
                 read -p "Empty Input. Press Enter to Continue..."
                 ;;
-        # Add entered input into log file and quit loop
+        # Run check_ip function when IP address input is required
         *)      if [ $1 = "IP Address" ]; then
                         check_ip
                         case "$return" in
+                        # Display Warning and prompt to re-enter input if IP address is invalid
                         inv)    read -p "Invalid IP address. Press Enter to Continue..."
                                 ;;
+                        # Add entered input into log file and quit loop if IP address is valid
                         val)    log_input
                                 ;;
                         esac
+                # Skip checking IP address, add entered input into log file and quit loop 
                 else
                         log_input
                 fi
