@@ -28,6 +28,7 @@ while [ -z $input ] ; do
                 ;;
         # Run check_ip function when IP address input is required
         *)      if [ "$1" = "IP Address" ]; then
+                while ["$return != "2"] do;
                         check_ip
                         case "$return" in
                         # Add entered input into log file and quit loop if IP address is valid and successfully pinged
@@ -55,6 +56,7 @@ while [ -z $input ] ; do
                 # Skip checking IP address, add entered input into log file and quit loop 
                 else
                         log_input "$string"
+                done
                 fi
                 ;;
         esac
