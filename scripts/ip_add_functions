@@ -1,9 +1,10 @@
 #!/bin/bash
-
-#telnet_test(){
-#        ipaddr=$(/home/e3admin/e3systems/logs/ping/)
-#}
-
+# Check telnet connection function
+telnet_test(){
+        username=$(grep "username=" logs/output/"$ipaddress".log | cut -d"=" -f2)
+        password=$(grep "username=" logs/output/"$ipaddress".log | cut -d"=" -f2)
+        ./telnet.sh ipaddress username password
+}
 # Check IP address validity function
 check_ip(){
         clear
@@ -18,7 +19,7 @@ check_ping(){
 }
 # Log input function
 log_input(){
-        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> logs/output/"$ipaddr".log
+        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> logs/output/"$ipaddress".log
         unset input
 }
 # Input function for adding vessels
@@ -45,7 +46,7 @@ while [ -z "$input" ] ; do
                         # Add entered input into log file and quit loop if IP address is valid and successfully pinged
                         val)    check_ping
                                 case "$return" in
-                                0)      ipaddr="$input"
+                                0)      ipaddress="$input"
                                         log_input "$string"
                                         break
                                         ;;
@@ -54,7 +55,7 @@ while [ -z "$input" ] ; do
                                                 clear
                                                 read -p "Could not reach IP address. Continue anyways? (y/n): " yn
                                                 case "$yn" in
-                                                y)      ipaddr="$input"
+                                                y)      ipaddress="$input"
                                                         log_input "$string"
                                                         break 2
                                                         ;;
