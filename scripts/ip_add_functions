@@ -31,7 +31,8 @@ while [ -z $input ] ; do
                         check_ip
                         case "$return" in
                         # Display Warning and prompt to re-enter input if IP address is invalid
-                        inv)    read -p "Invalid IP address. Press Enter to Continue..."
+                        inv)    clear
+                                read -p "Invalid IP address. Press Enter to Continue..."
                                 ;;
                         # Add entered input into log file and quit loop if IP address is valid
                         val)    log_input
