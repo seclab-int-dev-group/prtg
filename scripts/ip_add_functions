@@ -14,8 +14,7 @@ check_ping(){
 # Log input function
 log_input(){
         echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> test.txt
-        input=""
-        break
+        unset input
 }
 # Input function for adding vessels
 input(){
@@ -42,11 +41,13 @@ while [ -z $input ] ; do
                         val)    check_ping
                                 case "$return" in
                                 0)      log_input "$string"
+                                        break
                                         ;;
                                 1)      clear
                                         read -p "Could not reach IP address. Continue anyways? (y/n): " yn
                                         case "$yn" in
-                                        y)      log_input "$string"      
+                                        y)      log_input "$string"
+                                                break 2
                                                 ;;
                                         n)      unset input
                                                 ;;
@@ -66,6 +67,7 @@ while [ -z $input ] ; do
                 # Skip checking IP address, add entered input into log file and quit loop 
                 else
                         log_input "$string"
+                        break
                 fi
                 ;;
         esac
