@@ -71,9 +71,9 @@ while [ -z "$input" ] ; do
                                 esac
                                 ;;
                         # Display warning and prompt to save or re-enter input if IP address could not be pinged        
-                        inv)    unset input
-                                clear
+                        inv)    clear
                                 read -p "\"$input\" is not a valid IP Address. Press Enter to Continue..."
+                                unset input
                                 ;;
                         esac
                 # Skip checking IP address, add entered input into log file and quit loop 
