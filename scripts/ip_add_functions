@@ -5,6 +5,9 @@ telnet_test(){
         password=$(grep "username=" logs/output/"$ipaddress".log | cut -d"=" -f2)
         ./telnet.sh ipaddress username password | tee logs/raw/"$ipaddress".log
 }
+save_to_database(){
+                
+}
 # Check IP address validity function
 check_ip(){
         clear
@@ -16,6 +19,17 @@ check_ping(){
         clear
         echo "Running ping test on IP Address \"$input\". Please wait..."
         return=$(ping -c1 -W5 "$input" &> logs/ping/"$ipaddress".log; echo "$?")
+}
+get_ping(){
+        ping -c5 -t30 "$ipaddress" &> logs/ping/"$ipaddress".log
+        pingmin=$(grep 'rtt min/avg/max/mdev = ' logs/ping/"$ipaddress".log | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/rtt min\/avg\/max\/mdev = //")
+        pingavg=$(grep 'rtt min/avg/max/mdev = ' logs/ping/"$ipaddress".log | cut -d'/' -f5 | sed 's/ ms//g')
+        pingmax=$(grep 'rtt min/avg/max/mdev = ' logs/ping/"$ipaddress".log | cut -d'/' -f6 | sed 's/ ms//g')
+        pktloss=$(grep 'packet loss' logs/ping/"$ipaddress".log | cut -d' ' -f6 | sed 's/%//g')
+        echo "ping_min=$pingmin" >> logs/output/"$ipaddress".log
+        echo "ping_avg=$pingavg" >> logs/output/"$ipaddress".log
+        echo "ping_max=$pingmax" >> logs/output/"$ipaddress".log
+        echo "packet_loss=$pktloss" >> logs/output/"$ipaddress".log
 }
 # Log input function
 log_input(){
