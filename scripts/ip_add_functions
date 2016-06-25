@@ -43,19 +43,21 @@ while [ -z $input ] ; do
                                 0)      log_input "$string"
                                         break
                                         ;;
-                                1)      clear
-                                        read -p "Could not reach IP address. Continue anyways? (y/n): " yn
-                                        case "$yn" in
-                                        y)      log_input "$string"
-                                                break 2
-                                                ;;
-                                        n)      unset input
-                                                ;;
-                                        *)      unset yn
-                                                read -p "Invalid input. Press Enter to Continue..."  
-                                                ;;
+                                1)      while [ -z "$yn" ]; do
+                                                clear
+                                                read -p "Could not reach IP address. Continue anyways? (y/n): " yn
+                                                case "$yn" in
+                                                y)      log_input "$string"
+                                                        break 2
+                                                        ;;
+                                                n)      unset input
+                                                        ;;
+                                                *)      unset yn
+                                                        read -p "Invalid input. Press Enter to Continue..."  
+                                                        ;;
+                                                esac
+                                        done
                                         ;;
-                                        esac
                                 esac
                                 ;;
                         # Display warning and prompt to save or re-enter input if IP address could not be pinged        
