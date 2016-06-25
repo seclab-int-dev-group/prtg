@@ -9,7 +9,7 @@ check_ip(){
 check_ping(){
         clear
         echo "Running ping check. Please wait..."
-        return=$(ping -c1 "$input" &> /dev/null; echo "$?")
+        return=$(ping -c1 -W5 "$input" &> /dev/null; echo "$?")
 }
 # Log input function
 log_input(){
@@ -43,7 +43,8 @@ while [ -z $input ] ; do
                                 0)      log_input "$string"
                                         break
                                         ;;
-                                1)      while [ -z "$yn" ]; do
+                                1)      unset yn
+                                        while [ -z "$yn" ]; do
                                                 clear
                                                 read -p "Could not reach IP address. Continue anyways? (y/n): " yn
                                                 case "$yn" in
