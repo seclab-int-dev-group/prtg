@@ -18,9 +18,17 @@ while [ -z $input ] ; do
                 read -p "Empty Input. Press Enter to Continue..."
                 ;;
         # Add entered input into log file and quit loop
-        *)      echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> test.txt
-                input=""
-                break
+        *)      if [ $1 = "IP Address" ]; then
+                        test=$(ipcalc -cs4 $input || echo inv)
+                        case "$test" in
+                        inv)    read -p "Invalid IP address. Press Enter to Continue..."
+                                ;;
+                        esac
+                else
+                        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> test.txt
+                        input=""
+                        break
+                fi
                 ;;
         esac
 done
