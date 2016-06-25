@@ -1,7 +1,7 @@
 #!/bin/bash
 # Check IP address validity function
 check_ip(){
-        return=$(ping -c1 "$input" &> /dev/null; echo $?)
+        return=$(ping -c1 "$input" &> /dev/null; echo "$?")
 }
 # Log input function
 log_input(){
@@ -31,13 +31,13 @@ while [ -z $input ] ; do
                         check_ip
                         case "$return" in
                         # Add entered input into log file and quit loop if IP address is valid and successfully pinged
-                        0)      log_input
+                        0)      log_input "$string"
                                 ;;
                         # Display warning and prompt to save or re-enter input if IP address could not be pinged        
                         1)      clear
                                 read -p "Could not reach IP address. Continue anyways? (y/n): " yn
                                 case "$yn" in
-                                y)      log_input
+                                y)      log_input "$string"
                                         ;;
                                 n)      break
                                         ;;
@@ -54,7 +54,7 @@ while [ -z $input ] ; do
                         esac
                 # Skip checking IP address, add entered input into log file and quit loop 
                 else
-                        log_input
+                        log_input "$string"
                 fi
                 ;;
         esac
