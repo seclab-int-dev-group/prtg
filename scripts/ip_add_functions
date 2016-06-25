@@ -47,6 +47,7 @@ while [ -z $input ] ; do
                                         read -p "Could not reach IP address. Continue anyways? (y/n): " yn
                                         ;;
                                 esac
+                                ;;
                         # Display warning and prompt to save or re-enter input if IP address could not be pinged        
                         inv)    clear
                                 read -p "Invalid input. Press Enter to Continue..."
