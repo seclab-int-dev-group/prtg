@@ -1,7 +1,14 @@
 #!/bin/bash
 # Check IP address validity function
 check_ip(){
-        echo "checking IP Address validity. Please wait..."
+        clear
+        echo "Checking IP Address validity. Please wait..."
+        return=$(ipcalc -cs4 "$input" && echo val || echo inv)
+}
+# Ping IP address function
+check_ping(){
+        clear
+        echo "Running ping check. Please wait..."
         return=$(ping -c1 "$input" &> /dev/null; echo "$?")
 }
 # Log input function
@@ -32,32 +39,16 @@ while [ -z $input ] ; do
                         check_ip
                         case "$return" in
                         # Add entered input into log file and quit loop if IP address is valid and successfully pinged
-                        0)      log_input "$string"
+                        val)    log_input "$string"
                                 ;;
                         # Display warning and prompt to save or re-enter input if IP address could not be pinged        
-                        1)      clear
-                                read -p "Could not reach IP address. Continue anyways? (y/n): " yn
-                                case "$yn" in
-                                y)      log_input "$string"
-                                        ;;
-                                n)      break
-                                        ;;
-                                *)      unset input
-                                        clear
-                                        read -p "Invalid input. Press Enter to Continue..."
-                                        ;;
-                                esac
-                                ;;
-                        # Display warning and prompt to re-enter input if IP address is invalid
-                        2)      unset input
-                                clear
-                                read -p "Invalid IP address. Press Enter to Continue..."
+                        inv)    clear
+                                read -p "Invalid input. Press Enter to Continue..."
                                 ;;
                         esac
                 # Skip checking IP address, add entered input into log file and quit loop 
                 else
                         log_input "$string"
-                done
                 fi
                 ;;
         esac
