@@ -1,7 +1,6 @@
 #!/bin/bash
 # Check IP address validity function
 check_ip(){
-        # return=$(ipcalc -cs4 $input && echo val || echo inv)
         return=$(ping -c1 "$input" &> /dev/null; echo $?)
 }
 # Log input function
@@ -45,7 +44,8 @@ while [ -z $input ] ; do
                                 *)      clear
                                         read -p "Invalid input. Press Enter to Continue..."
                                         ;;
-                                esac        
+                                esac
+                                ;;
                         # Display warning and prompt to re-enter input if IP address is invalid
                         2)      clear
                                 read -p "Invalid IP address. Press Enter to Continue..."
