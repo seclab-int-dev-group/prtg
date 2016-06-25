@@ -18,7 +18,7 @@ while [ -z $input ] ; do
                 read -p "Empty Input. Press Enter to Continue..."
                 ;;
         # Add entered input into log file and quit loop
-        *)      echo "$input" >> test.txt
+        *)      echo "$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> test.txt
                 input=""
                 break
                 ;;
