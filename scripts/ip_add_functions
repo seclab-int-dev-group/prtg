@@ -43,13 +43,15 @@ while [ -z $input ] ; do
                                 case "$return" in
                                 0)      log_input "$string"
                                         ;;
-                                1)      clear
+                                1)      unset input
+                                        clear
                                         read -p "Could not reach IP address. Continue anyways? (y/n): " yn
                                         ;;
                                 esac
                                 ;;
                         # Display warning and prompt to save or re-enter input if IP address could not be pinged        
-                        inv)    clear
+                        inv)    unset input
+                                clear
                                 read -p "Invalid input. Press Enter to Continue..."
                                 ;;
                         esac
