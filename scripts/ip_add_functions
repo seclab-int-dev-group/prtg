@@ -43,9 +43,16 @@ while [ -z $input ] ; do
                                 case "$return" in
                                 0)      log_input "$string"
                                         ;;
-                                1)      unset input
-                                        clear
+                                1)      clear
                                         read -p "Could not reach IP address. Continue anyways? (y/n): " yn
+                                        case "$yn" in
+                                        y)      log_input "$string"      
+                                                ;;
+                                        n)      unset input
+                                                ;;
+                                        *)      unset yn
+                                                read -p "Invalid input. Press Enter to Continue..."  
+                                                ;;
                                         ;;
                                 esac
                                 ;;
