@@ -1,5 +1,8 @@
 #!/bin/bash
-
+# Check IP address validity function
+check_ip(){
+        return=$(ipcalc -cs4 $input && echo val || echo inv)
+}
 # Input function for adding vessels
 input(){
 # Run while loop until input variable is populated
@@ -19,8 +22,8 @@ while [ -z $input ] ; do
                 ;;
         # Add entered input into log file and quit loop
         *)      if [ $1 = "IP Address" ]; then
-                        test=$(ipcalc -cs4 $input || echo inv)
-                        case "$test" in
+                        check_ip
+                        case "$return" in
                         inv)    read -p "Invalid IP address. Press Enter to Continue..."
                                 ;;
                         esac
