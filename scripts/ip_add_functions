@@ -28,7 +28,7 @@ while [ -z $input ] ; do
                 ;;
         # Run check_ip function when IP address input is required
         *)      if [ "$1" = "IP Address" ]; then
-                while ["$return != "2"] do;
+                while ["$return != "0"] do;
                         check_ip
                         case "$return" in
                         # Add entered input into log file and quit loop if IP address is valid and successfully pinged
