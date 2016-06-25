@@ -1,14 +1,8 @@
 #!/bin/bash
-
-check_ping(){
-        
-}
-
 # Check IP address validity function
 check_ip(){
         # return=$(ipcalc -cs4 $input && echo val || echo inv)
         $ return=$(ping -c1 "$input" &> /dev/null; echo $?)
-
 }
 # Log input function
 log_input(){
