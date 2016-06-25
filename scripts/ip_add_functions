@@ -3,7 +3,7 @@
 telnet_test(){
         username=$(grep "username=" logs/output/"$ipaddress".log | cut -d"=" -f2)
         password=$(grep "username=" logs/output/"$ipaddress".log | cut -d"=" -f2)
-        ./telnet.sh ipaddress username password | tee logs/raw/"$ipaddress.log"
+        ./telnet.sh ipaddress username password | tee logs/raw/"$ipaddress".log
 }
 # Check IP address validity function
 check_ip(){
@@ -15,7 +15,7 @@ check_ip(){
 check_ping(){
         clear
         echo "Running ping test on IP Address \"$input\". Please wait..."
-        return=$(ping -c1 -W5 "$input" &> /dev/null; echo "$?")
+        return=$(ping -c1 -W5 "$input" &> logs/ping/"$ipaddress".log; echo "$?")
 }
 # Log input function
 log_input(){
