@@ -3,6 +3,12 @@
 check_ip(){
         return=$(ipcalc -cs4 $input && echo val || echo inv)
 }
+# Log input function
+log_input(){
+        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> test.txt
+        input=""
+        break
+}
 # Input function for adding vessels
 input(){
 # Run while loop until input variable is populated
@@ -26,11 +32,11 @@ while [ -z $input ] ; do
                         case "$return" in
                         inv)    read -p "Invalid IP address. Press Enter to Continue..."
                                 ;;
+                        val)    log_input
+                                ;;
                         esac
                 else
-                        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> test.txt
-                        input=""
-                        break
+                        log_input
                 fi
                 ;;
         esac
