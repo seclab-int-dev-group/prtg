@@ -54,6 +54,7 @@ while [ -z $input ] ; do
                                                 read -p "Invalid input. Press Enter to Continue..."  
                                                 ;;
                                         ;;
+                                        esac
                                 esac
                                 ;;
                         # Display warning and prompt to save or re-enter input if IP address could not be pinged        
