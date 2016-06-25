@@ -14,7 +14,7 @@ check_ip(){
 # Ping IP address function
 check_ping(){
         clear
-        echo "Running ping check on IP Address \"$input\". Please wait..."
+        echo "Running ping test on IP Address \"$input\". Please wait..."
         return=$(ping -c1 -W5 "$input" &> /dev/null; echo "$?")
 }
 # Log input function
