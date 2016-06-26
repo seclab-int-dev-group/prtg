@@ -21,7 +21,7 @@ check_ping(){
         return=$(ping -c1 -W5 "$input" &> logs/ping/"$ipaddress".log; echo "$?")
 }
 get_ping(){
-        ping -c5 -t30 "$ipaddress" &> logs/ping/"$ipaddress".log
+        ping -c5 -W30 "$ipaddress" &> logs/ping/"$ipaddress".log
         ping_min=$(grep 'rtt min/avg/max/mdev = ' logs/ping/"$ipaddress".log | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/rtt min\/avg\/max\/mdev = //")
         ping_avg=$(grep 'rtt min/avg/max/mdev = ' logs/ping/"$ipaddress".log | cut -d'/' -f5 | sed 's/ ms//g')
         ping_max=$(grep 'rtt min/avg/max/mdev = ' logs/ping/"$ipaddress".log | cut -d'/' -f6 | sed 's/ ms//g')
