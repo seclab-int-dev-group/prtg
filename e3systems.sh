@@ -103,6 +103,8 @@ sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.La
 fi
 fi
 
+pingtest=$(mysql $db -u$dbuser -p$dbpass -e "SELECT Ping FROM $table WHERE IP_Address='$1';" | grep -v 'Ping')
+
 if [ -n "$checkip" ]; then
 
 	if [[ "$lat" != *.* ]] || [[ "$long" != *.* ]]; then  
@@ -110,7 +112,7 @@ sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.La
 sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconred.png',});/" /var/www/html/map/map-eu.html
 sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconred.png',});/" /var/www/html/map/map-us.html
 	else
-		if [[ "$lat" = *.* ]] && [[ "$long" = *.* ]] && [[ "$ping" -gt 1000 ]]; then 
+		if [[ "$lat" = *.* ]] && [[ "$long" = *.* ]] && [[ "$pingtest" -gt 1000 ]]; then 
 sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconorange.png',});/" /var/www/html/map/map-global.html
 sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconorange.png',});/" /var/www/html/map/map-eu.html
 sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconorange.png',});/" /var/www/html/map/map-us.html	
