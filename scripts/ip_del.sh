@@ -7,12 +7,11 @@
 ###############################################################################################################################
 
 # Declare variables.
-user=""                                   # User scripts will run under.
-db="e3db"                                 # MySQL database name.
-table="e3tb"                              # MySQL table name.
-dbuser=""                                 # MySQL database username.
-dbpass=""                                 # MySQL database password.
-logs="/home/$user/e3systems/logs"         # Logs directory.
+user="e3admin"
+db="e3db"           # MySQL database name.
+table="e3tb"        # MySQL table name.
+dbuser="e3admin"    # MySQL database username.
+dbpass="E3System5!" # MySQL database password.
 
 ###############################################################################################################################
 
@@ -39,10 +38,14 @@ else
     sudo sed -i '/'$1'/d' /etc/crontab
 
     # Remove log files corresponding to IP address set as argument.
-    rm -f $logs/*/$1
+    rm -f /home/$user/e3systems/logs/*/$1
     
     # Remove corresponding database row.
     mysql $db -u$dbuser -p$dbpass -e "DELETE FROM $table WHERE IP_Address='$1';"
+
+    sed -i "/<!-- START SET $1 -->/,/<!-- END SET $1 -->/d" /var/www/html/map/map-global.html
+    sed -i "/<!-- START SET $1 -->/,/<!-- END SET $1 -->/d" /var/www/html/map/map-eu.html
+    sed -i "/<!-- START SET $1 -->/,/<!-- END SET $1 -->/d" /var/www/html/map/map-us.html
   
     # Ouput IP address removed as crontab entry.
     echo "<< IP address $1 removed from schedule >>"
