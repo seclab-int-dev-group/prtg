@@ -7,17 +7,17 @@
 ###############################################################################################################################
 
 # Declare variables.
-db="e3db"         # MySQL database name.
-table="e3tb"      # MySQL table name.
-dbuser=""           # MySQL database username
-dbpass=""           # MySQL database password
+db="e3db"           # MySQL database name.
+table="e3tb"        # MySQL table name.
+dbuser="e3admin"    # MySQL database username
+dbpass="E3System5!" # MySQL database password
 rxsnr=$(mysql $db -u$dbuser -p$dbpass -e \
 "SELECT Rx_SNR FROM $table WHERE IP_Address='$1';" | grep -v 'Rx_SNR' | awk '{printf "%.1f\n", $1}')
 rxrr=$(mysql $db -u$dbuser -p$dbpass -e \
 "SELECT Rx_raw_reg FROM $table WHERE IP_Address='$1';" | grep -v 'Rx_raw_reg')
 rxrrl=$(mysql $db -u$dbuser -p$dbpass -e \
 "SELECT Rx_raw_reg_lookup FROM $table WHERE IP_Address='$1';" | grep -v 'Rx_raw_reg_lookup')
-msg="Rx SNR: $rsxnr dB, Rx Reg Raw: $rxrr dB, Rx Reg Raw Lookup: $rxrrl dB"
+msg="Rx SNR $rxsnr dB"
 
 ###############################################################################################################################
 

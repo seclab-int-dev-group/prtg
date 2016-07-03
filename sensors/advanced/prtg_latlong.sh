@@ -7,14 +7,13 @@
 ###############################################################################################################################
 
 # Declare variables.
-db="e3db"         # MySQL database name.
-table="e3tb"      # MySQL table name.
-dbuser=""           # MySQL database username
-dbpass=""           # MySQL database password
+db="e3db"           # MySQL database name.
+table="e3tb"        # MySQL table name.
+dbuser="e3admin"    # MySQL database username
+dbpass="E3System5!" # MySQL database password
 lat=$(mysql $db -u$dbuser -p$dbpass -e "SELECT Latitude FROM $table WHERE IP_Address='$1';" | grep -v 'Latitude')
 long=$(mysql $db -u$dbuser -p$dbpass -e "SELECT Longitude FROM $table WHERE IP_Address='$1';" | grep -v 'Longitude')
-msg="$lat, $long"
-
+latlong="$lat, $long"
 ###############################################################################################################################
 
 # Convert Longitude variable to PRTG compatible value.
@@ -48,7 +47,7 @@ echo -n "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>
     <unit>Custom</unit>
     <customunit>deg</customunit>
   </result>
-  <text>$msg</text>
+  <text>$latlong</text>
 </prtg>"
 
 exit 0
