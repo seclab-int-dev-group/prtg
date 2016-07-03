@@ -7,14 +7,14 @@
 ###############################################################################################################################
 
 # Declare variables.
-user=""                                                # User scripts will run under.
-db="e3db"                                              # MySQL database name.
-table="e3tb"                                           # MySQL table name.
-dbuser=""                                              # MySQL database username
-dbpass=""                                              # MySQL database password
-outlog="/home/$user/e3systems/logs/output/"            # Output log file location.
-rawlog="/home/$user/e3systems/logs/raw/"               # Raw log file location.
-telnet="/home/$user/e3systems/scripts/ip_tel.sh"       # Telnet script location.
+user="e3admin"
+db="e3db"                        		   # MySQL database name.
+table="e3tb"                     		   # MySQL table name.
+dbuser="e3admin"                  		   # MySQL database username
+dbpass="E3System5!"             	           # MySQL database password
+outlog="/home/$user/e3systems/logs/output"         # Output log file location.
+rawlog="/home/$user/e3systems/logs/raw"            # Raw log file location.
+telnet="/home/$user/e3systems/scripts/ip_tel.sh"   # Telnet script location.
 
 ###############################################################################################################################
 
@@ -62,5 +62,64 @@ Rx_raw_reg_lookup='$rxrrl', \
 Beam_Int='$beamint', \
 Beam_Str='$beamstr' \
 WHERE IP_Address='$1';"
+
+checkip=$(grep "$1" /var/www/html/map/map-global.html)
+
+name=$(echo $4 | tr '[:upper:]' '[:lower:]' | sed -e 's/ //g')
+content=$(echo $4 | tr '[:lower:]' '[:upper:]' | sed -e 's/_/ /g')
+
+if [ -z "$checkip" ] && [ -n "$lat" ] && [ -n "$long" ]; then
+
+
+        if [[ $lat == *N ]]; then
+                lat=$(echo "$lat" | sed 's/.$//' | sed 's/ //')
+        else
+                lat=$(echo "-$lat" | sed 's/.$//' | sed 's/ //')
+        fi
+
+        # Convert Latitude variable to PRTG compatible value.
+        if [[ $long == *E ]]; then
+                long=$(echo "$long" | sed 's/.$//' | sed 's/ //')
+        else
+                long=$(echo "-$long" | sed 's/.$//' | sed 's/ //')
+        fi
+
+
+
+
+sed -i "s/<!-- START MAP MARKERS -->/<!-- START MAP MARKERS -->\n<!-- START SET $1 -->\nvar $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});\n$name\_marker.setMap(map);\nvar $name\_info = new google.maps.InfoWindow({content:\"$content\"});\ngoogle.maps.event.addListener($name\_marker, \'click\', function() {$name\_info.open(map,$name\_marker);});\n<!-- END SET $1 -->/g" /var/www/html/map/map-global.html
+
+sed -i "s/<!-- START MAP MARKERS -->/<!-- START MAP MARKERS -->\n<!-- START SET $1 -->\nvar $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});\n$name\_marker.setMap(map);\nvar $name\_info = new google.maps.InfoWindow({content:\"$content\"});\ngoogle.maps.event.addListener($name\_marker, \'click\', function() {$name\_info.open(map,$name\_marker);});\n<!-- END SET $1 -->/g" /var/www/html/map/map-eu.html
+
+sed -i "s/<!-- START MAP MARKERS -->/<!-- START MAP MARKERS -->\n<!-- START SET $1 -->\nvar $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});\n$name\_marker.setMap(map);\nvar $name\_info = new google.maps.InfoWindow({content:\"$content\"});\ngoogle.maps.event.addListener($name\_marker, \'click\', function() {$name\_info.open(map,$name\_marker);});\n<!-- END SET $1 -->/g" /var/www/html/map/map-us.html
+
+else
+
+if [ -z "$checkip" ] || [ -z "$lat" ] || [ -z "$long" ]; then
+
+	echo "Could not complete $1 connection. Skipping marker update."
+
+else
+
+	if [[ $lat == *N ]]; then
+  		lat=$(echo "$lat" | sed 's/.$//')
+	else
+  		lat=$(echo "-$lat" | sed 's/.$//')
+	fi
+
+	# Convert Latitude variable to PRTG compatible value.
+	if [[ $long == *E ]]; then
+  		long=$(echo "$long" | sed 's/.$//')
+	else
+  		long=$(echo "-$long" | sed 's/.$//')
+	fi
+
+sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});/" /var/www/html/map/map-global.html
+sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});/" /var/www/html/map/map-eu.html
+sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});/" /var/www/html/map/map-us.html
+
+fi
+
+fi
 
 exit 0
