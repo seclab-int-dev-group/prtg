@@ -28,9 +28,23 @@ echo $1 > $outlog/$1
 lat=$( grep "latlong = " $rawlog/$1 | cut -d" " -f3-4 | sed 's/\r//g')
 grep "latlong = " $rawlog/$1 | cut -d" " -f3-4 | sed 's/\r//g' >> $outlog/$1
 
+# Convert Latitude variable to PRTG compatible value.
+if [[ $lat == *N ]]; then
+	lat=$(echo "$lat" | sed 's/.$//' | sed 's/ //')
+else
+	lat=$(echo "-$lat" | sed 's/.$//' | sed 's/ //')
+fi
+
 # Grab longitude data from temporary file, populate variable named long and make log entry.
 long=$( grep "latlong = " $rawlog/$1 | cut -d" " -f5-6 | sed 's/\r//g' )
 grep "latlong = " $rawlog/$1 | cut -d" " -f5-6 | sed 's/\r//g' >> $outlog/$1
+
+# Convert longitude variable to PRTG compatible value.
+if [[ $long == *E ]]; then
+	long=$(echo "$long" | sed 's/.$//' | sed 's/ //')
+else
+	long=$(echo "-$long" | sed 's/.$//' | sed 's/ //')
+fi
 
 # Grab Rx SNR data from temporary file, populate variable named rxsnr and make log entry.
 rxsnr=$( grep "Rx SNR: " $rawlog/$1 | cut -d" " -f3 | sed 's/\r//g' )
@@ -70,23 +84,6 @@ content=$(echo $4 | tr '[:lower:]' '[:upper:]' | sed -e 's/_/ /g')
 
 if [ -z "$checkip" ] && [ -n "$lat" ] && [ -n "$long" ]; then
 
-
-        if [[ $lat == *N ]]; then
-                lat=$(echo "$lat" | sed 's/.$//' | sed 's/ //')
-        else
-                lat=$(echo "-$lat" | sed 's/.$//' | sed 's/ //')
-        fi
-
-        # Convert Latitude variable to PRTG compatible value.
-        if [[ $long == *E ]]; then
-                long=$(echo "$long" | sed 's/.$//' | sed 's/ //')
-        else
-                long=$(echo "-$long" | sed 's/.$//' | sed 's/ //')
-        fi
-
-
-
-
 sed -i "s/<!-- START MAP MARKERS -->/<!-- START MAP MARKERS -->\n<!-- START SET $1 -->\nvar $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});\n$name\_marker.setMap(map);\nvar $name\_info = new google.maps.InfoWindow({content:\"$content\"});\ngoogle.maps.event.addListener($name\_marker, \'click\', function() {$name\_info.open(map,$name\_marker);});\n<!-- END SET $1 -->/g" /var/www/html/map/map-global.html
 
 sed -i "s/<!-- START MAP MARKERS -->/<!-- START MAP MARKERS -->\n<!-- START SET $1 -->\nvar $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});\n$name\_marker.setMap(map);\nvar $name\_info = new google.maps.InfoWindow({content:\"$content\"});\ngoogle.maps.event.addListener($name\_marker, \'click\', function() {$name\_info.open(map,$name\_marker);});\n<!-- END SET $1 -->/g" /var/www/html/map/map-eu.html
@@ -96,30 +93,29 @@ sed -i "s/<!-- START MAP MARKERS -->/<!-- START MAP MARKERS -->\n<!-- START SET 
 else
 
 if [ -z "$checkip" ] || [ -z "$lat" ] || [ -z "$long" ]; then
-
 	echo "Could not complete $1 connection. Skipping marker update."
-
 else
 
-	if [[ $lat == *N ]]; then
-  		lat=$(echo "$lat" | sed 's/.$//')
-	else
-  		lat=$(echo "-$lat" | sed 's/.$//')
-	fi
-
-	# Convert Latitude variable to PRTG compatible value.
-	if [[ $long == *E ]]; then
-  		long=$(echo "$long" | sed 's/.$//')
-	else
-  		long=$(echo "-$long" | sed 's/.$//')
-	fi
-
-sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});/" /var/www/html/map/map-global.html
-sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});/" /var/www/html/map/map-eu.html
-sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});/" /var/www/html/map/map-us.html
+sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});/" /var/www/html/map/map-global.html
+sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});/" /var/www/html/map/map-eu.html
+sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'icon.png',});/" /var/www/html/map/map-us.html
 
 fi
+fi
 
+if [ -n "$checkip" ]; then
+
+	if [[ "$lat" != *.* ]] || [[ "$long" != *.* ]]; then  
+sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconred.png',});/" /var/www/html/map/map-global.html
+sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconred.png',});/" /var/www/html/map/map-eu.html
+sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconred.png',});/" /var/www/html/map/map-us.html
+	else
+		if [[ "$lat" = *.* ]] && [[ "$long" = *.* ]] && [[ "$ping" > "1000" ]]; then 
+sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconorange.png',});/" /var/www/html/map/map-global.html
+sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconorange.png',});/" /var/www/html/map/map-eu.html
+sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconorange.png',});/" /var/www/html/map/map-us.html	
+		fi
+	fi
 fi
 
 exit 0
