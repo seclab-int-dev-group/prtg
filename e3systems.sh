@@ -110,7 +110,7 @@ sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.La
 sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconred.png',});/" /var/www/html/map/map-eu.html
 sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconred.png',});/" /var/www/html/map/map-us.html
 	else
-		if [[ "$lat" = *.* ]] && [[ "$long" = *.* ]] && [[ "$ping" > "1000" ]]; then 
+		if [[ "$lat" = *.* ]] && [[ "$long" = *.* ]] && [[ "$ping" -gt 1000 ]]; then 
 sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconorange.png',});/" /var/www/html/map/map-global.html
 sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconorange.png',});/" /var/www/html/map/map-eu.html
 sed -i "s/^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(*.*,*.*),icon:'iconorange.png',});/" /var/www/html/map/map-us.html	
