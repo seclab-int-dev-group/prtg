@@ -24,45 +24,38 @@ $telnet $1 $2 $3 | tee $rawlog/$1
 # Make log entry with IP address of modem.
 echo $1 > $outlog/$1
 
-# Grab latitude data from temporary file,populate variable named lat and make log entry.
+# Grab latitude data from telnet session log, populate variable named lat and make log entry.
 lat=$( grep "latlong = " $rawlog/$1 | cut -d" " -f3-4 | sed 's/\r//g')
-grep "latlong = " $rawlog/$1 | cut -d" " -f3-4 | sed 's/\r//g' >> $outlog/$1
 
 # Convert Latitude variable to PRTG compatible value.
 if [[ $lat == *N ]]; then
-	lat=$(echo "$lat" | sed 's/.$//' | sed 's/ //')
+	lat=$(echo "$lat" | sed 's/.$//' | sed 's/ //') | tee $outlog/$1
 else
-	lat=$(echo "-$lat" | sed 's/.$//' | sed 's/ //')
+	lat=$(echo "-$lat" | sed 's/.$//' | sed 's/ //') | tee $outlog/$1
 fi
 
-# Grab longitude data from temporary file, populate variable named long and make log entry.
+# Grab longitude data from telnet session log, populate variable named lat and make log entry.
 long=$( grep "latlong = " $rawlog/$1 | cut -d" " -f5-6 | sed 's/\r//g' )
-grep "latlong = " $rawlog/$1 | cut -d" " -f5-6 | sed 's/\r//g' >> $outlog/$1
 
 # Convert longitude variable to PRTG compatible value.
 if [[ $long == *E ]]; then
-	long=$(echo "$long" | sed 's/.$//' | sed 's/ //')
+	long=$(echo "$long" | sed 's/.$//' | sed 's/ //') | tee $outlog/$1
 else
-	long=$(echo "-$long" | sed 's/.$//' | sed 's/ //')
+	long=$(echo "-$long" | sed 's/.$//' | sed 's/ //') | tee $outlog/$1
 fi
 
-# Grab Rx SNR data from temporary file, populate variable named rxsnr and make log entry.
-rxsnr=$( grep "Rx SNR: " $rawlog/$1 | cut -d" " -f3 | sed 's/\r//g' )
-grep "Rx SNR: " $rawlog/$1 | cut -d" " -f3 | sed 's/\r//g' >> $outlog/$1
+# Grab Rx SNR data from telnet session log, populate variable named rxsnr and make log entry.
+rxsnr=$( grep "Rx SNR: " $rawlog/$1 | cut -d" " -f3 | sed 's/\r//g' ) | tee $outlog/$1
 
-# Grab Rx reg raw data from temporary file, populate variable named rxrr and make log entry.
-rxrr=$( grep "Rx raw reg: " $rawlog/$1 | cut -d" " -f4 | sed 's/\r//g' )
-grep "Rx raw reg: " $rawlog/$1 | cut -d" " -f4 | sed 's/\r//g' >> $outlog/$1
+# Grab Rx reg raw data from telnet session log, populate variable named rxrr and make log entry.
+rxrr=$( grep "Rx raw reg: " $rawlog/$1 | cut -d" " -f4 | sed 's/\r//g' ) | tee $outlog/$1
 
-# Grab Rx reg raw lookup data from temporary file, populate variable named rxrrl and make log entry.
-rxrrl=$( grep "Rx raw reg lookup: " $rawlog/$1 | cut -d" " -f5 | sed 's/\r//g' )
-grep "Rx raw reg lookup: " $rawlog/$1 | cut -d" " -f5 | sed 's/\r//g' >> $outlog/$1
+# Grab Rx reg raw lookup data from telnet session log, populate variable named rxrrl and make log entry.
+rxrrl=$( grep "Rx raw reg lookup: " $rawlog/$1 | cut -d" " -f5 | sed 's/\r//g' ) | tee $outlog/$1
 
-# Grab selected beam from temporary file, find corresponding beam, populate variable named beam and make log entry.
-beamint=$( grep " is currently selected" $rawlog/$1 | cut -d" " -f1 | sed 's/\r//g' )
-grep " is currently selected" $rawlog/$1 | cut -d" " -f1 | sed 's/\r//g' >> $outlog/$1
-beamstr=$( grep "$beamint = " $rawlog/$1 | cut -d" " -f3-20 | sed 's/\r//g' )
-grep "$beamint = " $rawlog/$1 | cut -d" " -f3-20 | sed 's/\r//g' >> $outlog/$1
+# Grab selected beam from telnet session log, find corresponding beam, populate variable named beam and make log entry.
+beamint=$( grep " is currently selected" $rawlog/$1 | cut -d" " -f1 | sed 's/\r//g' ) | tee $outlog/$1
+beamstr=$( grep "$beamint = " $rawlog/$1 | cut -d" " -f3-20 | sed 's/\r//g' ) | tee $outlog/$1
 
 # Insert data from above variables into MySQL database table.
 mysql $db -u$dbuser -p$dbpass -e "UPDATE $table SET \
