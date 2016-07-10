@@ -72,7 +72,7 @@ checkip=$(grep "($1)" /var/www/html/map/index.html | cut -d'(' -f2 | cut -d')' -
 
 content=$(echo $4 | tr '[:lower:]' '[:upper:]' | sed -e 's/_/ /g')
 
-if [ -z "$checkip" ] && [ -n "$lat" ] && [ -n "$long" ]; then
+if [[ -z "$checkip" && "$lat" == *.* && "$long" == *.* ]]; then
 
 
         if [[ $lat == *N ]]; then
@@ -101,20 +101,20 @@ sed -i "s/<!-- START MAP MARKERS -->/<!-- START MAP MARKERS -->\n<!-- START SET 
 
 else
 
-if [ -z "$checkip" ] || [ -z "$lat" ] || [ -z "$long" ]; then
+if [[ -z "$checkip" || "$lat" != *.* || "$long" != *.* ]]; then
 
 	echo "Could not complete $1 connection. Skipping marker update."
 
 else
 
-	if [[ $lat == *N ]]; then
+	if [[ $lat == *.*N ]]; then
   		lat=$(echo "$lat" | sed 's/.$//')
 	else
   		lat=$(echo "-$lat" | sed 's/.$//')
 	fi
 
 	# Convert Latitude variable to PRTG compatible value.
-	if [[ $long == *E ]]; then
+	if [[ $long == *.*E ]]; then
   		long=$(echo "$long" | sed 's/.$//')
 	else
   		long=$(echo "-$long" | sed 's/.$//')
