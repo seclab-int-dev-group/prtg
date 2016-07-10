@@ -69,8 +69,8 @@ name=$(echo $4 | tr '[:upper:]' '[:lower:]' | sed -e 's/ //g')
 # Insert data from above variables into MySQL database table.
 mysql $db -u$dbuser -p$dbpass -e "UPDATE $table SET \
 Name='$name', \
-Ping='$ping', \
-Packet_loss='$pktloss', \
+# Ping='$ping', \
+# Packet_loss='$pktloss', \
 Latitude='$lat', \
 Longitude='$long', \
 Rx_SNR='$rxsnr', \
