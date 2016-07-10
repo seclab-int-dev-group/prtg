@@ -9,8 +9,8 @@
 # Declare variables.
 db="e3db"           # MySQL database name.
 table="e3tb"        # MySQL table name.
-dbuser=""           # MySQL database username.
-dbpass=""           # MySQL database password.
+dbuser="e3admin"    # MySQL database username.
+dbpass="E3System5!" # MySQL database password.
 
 ###############################################################################################################################
 
