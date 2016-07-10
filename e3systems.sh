@@ -144,8 +144,6 @@ sed -i "^var $name\_marker=new google.maps.Marker({position:new google.maps.LatL
 sed -i "^var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(\(.*\)),icon:'..\/images\/marker-*.png',});/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng(\1),icon:'..\/images\/marker-offline.png',});/" /var/www/html/map/maps/caribbean.html
 sed -i "s/^<li><a href=\"\#\"><img src=\"images\/marker-.*.png\"> $content ($1)<\/a><\/li>$/<li><a href=\"\#\"><img src=\"images\/marker-offline.png\"> $content ($1)<\/a><\/li>/" /var/www/html/map/index.html
 
-grep "var $name\_.*.png',});$/var $name\_marker"
-
 	fi
 fi
 
