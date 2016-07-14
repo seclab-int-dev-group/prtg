@@ -98,9 +98,10 @@ while [ -z "$input" ] ; do
                 *)      log_input "$string"
                         break
                         ;;
+                esac
                 # fi
                 ;;
-                esac
+                
         esac
 done
 }
