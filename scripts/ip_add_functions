@@ -3,7 +3,7 @@
 telnet_test(){
         username=$(grep "username=" logs/output/"$ipaddress".log | cut -d"=" -f2)
         password=$(grep "username=" logs/output/"$ipaddress".log | cut -d"=" -f2)
-        ./telnet.sh ipaddress username password | tee logs/raw/"$ipaddress".log
+        /home/e3admin/e3systems/scripts/telnet.sh ipaddress username password | tee /home/e3admin/e3systems/logs/raw/"$ipaddress".log
 }
 
 # Check IP address validity function
@@ -19,7 +19,7 @@ check_ping(){
         return=$(ping -c1 -W5 "$input" &> /home/e3admin/e3systems/logs/ping/"$ipaddress".log; echo "$?")
 }
 get_ping(){
-        ping -c5 -W30 "$ipaddress" &> logs/ping/"$ipaddress".log
+        ping -c5 -W30 "$ipaddress" &> /home/e3admin/e3systems/logs/ping/"$ipaddress".log
         ping_min=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/mdev = //")
         ping_avg=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f5 | sed 's/ ms//g')
         ping_max=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f6 | sed 's/ ms//g')
