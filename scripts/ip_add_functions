@@ -94,13 +94,13 @@ while [ -z "$input" ] ; do
                         esac
                 # Skip checking IP address, add entered input into log file and quit loop 
                 #else
-                ;;
-                *)
-                        log_input "$string"
-                        break
-                # fi
                         ;;
+                *)      log_input "$string"
+                        break
+                        ;;
+                # fi
                 ;;
+                esac
         esac
 done
 }
