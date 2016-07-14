@@ -54,7 +54,9 @@ while [ -z "$input" ] ; do
                 read -p "Input is empty. Press Enter to Continue..."
                 ;;
         # Run check_ip function when IP address input is required
-        *)      if [ "$1" = "IP Address" ]; then
+        *)      case "$1" in
+                "IP Address")
+                #        if [ "$1" = "IP Address" ]; then
                         check_ip
                         case "$return" in
                         # Add entered input into log file and quit loop if IP address is valid and successfully pinged
@@ -91,10 +93,13 @@ while [ -z "$input" ] ; do
                                 ;;
                         esac
                 # Skip checking IP address, add entered input into log file and quit loop 
-                else
+                #else
+                ;;
+                *)
                         log_input "$string"
                         break
-                fi
+                # fi
+                        ;;
                 ;;
         esac
 done
