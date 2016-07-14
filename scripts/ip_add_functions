@@ -5,9 +5,7 @@ telnet_test(){
         password=$(grep "username=" logs/output/"$ipaddress".log | cut -d"=" -f2)
         ./telnet.sh ipaddress username password | tee logs/raw/"$ipaddress".log
 }
-save_to_database(){
-                
-}
+
 # Check IP address validity function
 check_ip(){
         clear
@@ -18,24 +16,24 @@ check_ip(){
 check_ping(){
         clear
         echo "Running ping test on IP Address \"$input\". Please wait..."
-        return=$(ping -c1 -W5 "$input" &> logs/ping/"$ipaddress".log; echo "$?")
+        return=$(ping -c1 -W5 "$input" &> /home/e3admin/e3systems/logs/ping/"$ipaddress".log; echo "$?")
 }
 get_ping(){
         ping -c5 -W30 "$ipaddress" &> logs/ping/"$ipaddress".log
-        ping_min=$(grep 'rtt min/avg/max/mdev = ' logs/ping/"$ipaddress".log | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/rtt min\/avg\/max\/mdev = //")
-        ping_avg=$(grep 'rtt min/avg/max/mdev = ' logs/ping/"$ipaddress".log | cut -d'/' -f5 | sed 's/ ms//g')
-        ping_max=$(grep 'rtt min/avg/max/mdev = ' logs/ping/"$ipaddress".log | cut -d'/' -f6 | sed 's/ ms//g')
-        packet_loss=$(grep 'packet loss' logs/ping/"$ipaddress".log | cut -d' ' -f6 | sed 's/%//g')
+        ping_min=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/rtt min\/avg\/max\/mdev = //")
+        ping_avg=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f5 | sed 's/ ms//g')
+        ping_max=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f6 | sed 's/ ms//g')
+        packet_loss=$(grep 'packet loss' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d' ' -f6 | sed 's/%//g')
         {
         echo    "ping_min=$ping_min"
                 "ping_avg=$ping_avg"
                 "ping_max=$ping_max"
                 "packet_loss=$packet_loss"
-        } >> logs/output/"$ipaddress".log
+        } >> /home/e3admin/e3systems/logs/output/"$ipaddress".log
 }
 # Log input function
 log_input(){
-        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> logs/output/"$ipaddress".log
+        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> /home/e3admin/e3systems/logs/output/"$ipaddress".log
         unset input
 }
 # Input function for adding vessels
