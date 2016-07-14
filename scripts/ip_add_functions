@@ -20,7 +20,7 @@ check_ping(){
 }
 get_ping(){
         ping -c5 -W30 "$ipaddress" &> logs/ping/"$ipaddress".log
-        ping_min=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/rtt min\/avg\/max\/mdev = //")
+        ping_min=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/mdev = //")
         ping_avg=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f5 | sed 's/ ms//g')
         ping_max=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f6 | sed 's/ ms//g')
         packet_loss=$(grep 'packet loss' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d' ' -f6 | sed 's/%//g')
