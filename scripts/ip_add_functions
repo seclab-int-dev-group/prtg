@@ -1,119 +1,284 @@
 #!/bin/bash
-# Check telnet connection function
-telnet_test(){
-        username=$(grep "username=" logs/output/"$ipaddress".log | cut -d"=" -f2)
-        password=$(grep "username=" logs/output/"$ipaddress".log | cut -d"=" -f2)
-        /home/e3admin/e3systems/scripts/telnet.sh ipaddress username password | tee /home/e3admin/e3systems/logs/raw/"$ipaddress".log
+
+###############################################################################################################################
+# DESCRIPTION:      Automated bash script for pulling geolocation data.
+# USAGE:            Edit the variables with desired configuration and execute.
+# CREATED BY:       William Thomas Bland.
+###############################################################################################################################
+
+# Declare variables.
+user="e3admin"
+db="e3db"                                          # MySQL database name
+table="e3tb"                                       # MySQL table name.
+dbuser="e3admin"                                   # MySQL database username
+dbpass="E3System5!"                                # MySQL database password
+outputlog="/home/$user/e3systems/logs/output"         # Output log file location.
+rawlog="/home/$user/e3systems/logs/raw"            # Raw log file location.
+pinglog="/home/$user/e3systems/logs/ping"
+telnet="/home/$user/e3systems/scripts/ip_tel.sh"   # Telnet script location.
+
+###############################################################################################################################
+
+title_bar(){
+        echo "########################################################################################################"
+        echo "#                                                                                                      #"
+        echo "#                                <<<< E3SYSTEMS - ADD IP ADDRESS >>>>                                  #"
+        echo "#                                                                                                      #"
+        echo "########################################################################################################"
+        echo -e ""
 }
 
-# Check IP address validity function
+# Clear log files function.
+clear_logs(){
+        rm -rf /home/"$user"/e3systems/logs/*/*log
+}
+
+# Check IP address validity function.
 check_ip(){
         clear
+        title_bar
         echo "Running validity test on IP Address \"$input\". Please wait..."
-        return=$(ipcalc -cs4 "$input" && echo val || echo inv)
+        return=$(ipcalc -cs4 "$input" && echo 0 || echo 1)
 }
-# Ping IP address function
+
+# Ping IP address function.
 check_ping(){
         clear
+        title_bar
         echo "Running ping test on IP Address \"$input\". Please wait..."
-        return=$(ping -c1 -W5 "$input" &> /home/e3admin/e3systems/logs/ping/"$ipaddress".log; echo "$?")
+        return=$(ping -c5 -W30 "$input" &> "$pinglog"/"$ipaddress".log; echo "$?")
+        echo -e ""
+        cat "$pinglog/$ipaddress.log"
+        sleep 5
 }
+
+# Get Ping function for retrieving minimum, average and maximum ping aswell as packet loss.
 get_ping(){
-        ping -c5 -W30 "$ipaddress" &> /home/e3admin/e3systems/logs/ping/"$ipaddress".log
-        ping_min=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/mdev = //")
-        ping_avg=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f5 | sed 's/ ms//g')
-        ping_max=$(grep 'rtt min/avg/max/mdev = ' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d'/' -f6 | sed 's/ ms//g')
-        packet_loss=$(grep 'packet loss' /home/e3admin/e3systems/logs/ping/"$ipaddress".log | cut -d' ' -f6 | sed 's/%//g')
-        {
-        echo    "ping_min=$ping_min"
-                "ping_avg=$ping_avg"
-                "ping_max=$ping_max"
-                "packet_loss=$packet_loss"
-        } >> /home/e3admin/e3systems/logs/output/"$ipaddress".log
+        ping_min=$(grep 'rtt min/avg/max/mdev = ' "$pinglog"/"$ipaddress".log | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/mdev = //")
+        ping_avg=$(grep 'rtt min/avg/max/mdev = ' "$pinglog"/"$ipaddress".log | cut -d'/' -f5 | sed 's/ ms//g')
+        ping_max=$(grep 'rtt min/avg/max/mdev = ' "$pinglog"/"$ipaddress".log | cut -d'/' -f6 | sed 's/ ms//g')
+        packet_loss=$(grep 'packet loss' "$pinglog"/"$ipaddress".log | cut -d' ' -f6 | sed 's/%//g')
+        echo -e "ping_min=$ping_min\nping_avg=$ping_avg\nping_max=$ping_max\npacket_loss=$packet_loss" >> "$outputlog"/"$ipaddress".log
 }
-# Log input function
+
+# Log input function.
 log_input(){
-        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> /home/e3admin/e3systems/logs/output/"$ipaddress".log
+        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> "$outputlog"/"$ipaddress".log
         unset input
 }
-# Input function for adding vessels
-input(){
-# Run while loop until input variable is populated
-while [ -z "$input" ] ; do
-        clear
-        # Prompt for input
-        read -p "Enter $1: " input
-        # Run case statement based on input variable
-        case "$input" in
-        # Remove log file and quit loop if "q" is entered
-        q)      rm -f test.txt
-                break
-                ;;
-        # Display warning if input is left blank and prompt to re-enter input
-        '')     clear
-                read -p "Input is empty. Press Enter to Continue..."
-                ;;
-        # Run check_ip function when IP address input is required
-        *)      case "$1" in
-                "IP Address")
-                #        if [ "$1" = "IP Address" ]; then
-                        check_ip
-                        case "$return" in
-                        # Add entered input into log file and quit loop if IP address is valid and successfully pinged
-                        val)    check_ping
-                                case "$return" in
-                                0)      ipaddress="$input"
-                                        log_input "$string"
-                                        break
-                                        ;;
-                                1)      unset yn
-                                        while [ -z "$yn" ]; do
-                                                clear
-                                                read -p "Could not reach IP address \"$input\". Continue anyways? (y/n): " yn
-                                                case "$yn" in
-                                                y)      ipaddress="$input"
-                                                        log_input "$string"
-                                                        break 2
-                                                        ;;
-                                                n)      unset input
-                                                        ;;
-                                                *)      clear
-                                                        unset yn
-                                                        read -p "Invalid input. Press Enter to Continue..."  
-                                                        ;;
-                                                esac
-                                        done
-                                        ;;
-                                esac
-                                ;;
-                        # Display warning and prompt to save or re-enter input if IP address could not be pinged        
-                        inv)    clear
-                                read -p "\"$input\" is not a valid IP Address. Press Enter to Continue..."
-                                unset input
-                                ;;
-                        esac
-                # Skip checking IP address, add entered input into log file and quit loop 
-                #else
-                        ;;
-                *)      log_input "$string"
+# Function checking if username and password are entered correctly.
+check_userpass(){
+        if [[ "$input" = */* ]]; then
+                return=$(echo 0)
+        else
+                return=$(echo 1)
+        fi
+}
+
+# Function for attempting to establish a telnet session to entered IP address.
+check_telnet(){
+        /home/e3admin/e3systems/scripts/ip_tel.sh "$ipaddress" "$username" "$password" | tee "$rawlog"/"$ipaddress".log
+        lat=$( grep "latlong = " "$rawlog"/"$ipaddress".log | cut -d" " -f3-4 | sed 's/\r//g' ) 
+        lng=$( grep "latlong = " "$rawlog"/"$ipaddress".log | cut -d" " -f5-6 | sed 's/\r//g' )
+        if [[ "$lat" = *.* && "$lng" = *.* ]]; then
+                return=$(echo 0)
+        else
+                return=$(echo 1)
+        fi
+}
+
+# Runs this function when the main function requests an IP address as input.
+ip_address(){
+        check_ip
+        case "$return" in
+        # Add entered input into log file and quit loop if IP address is valid and successfully pinged
+        0)    ipaddress="$input"
+		check_ping
+                case "$return" in
+                0)      ipaddress="$input"
+                        log_input "$string"
+			get_ping
+                        clear
+                        title_bar
+                        read -p "Ping test successful. Press Enter to Continue..." 
                         break
                         ;;
+                1)      unset yn
+                        while [ -z "$yn" ]; do
+                                clear
+                                title_bar
+                                read -p "Could not reach IP address \"$input\". Continue anyways? (y/n): " yn
+                                case "$yn" in
+                                y)      ipaddress="$input"
+                                        log_input "$string"
+                                        break 2
+                                        ;;
+                                n)      unset input
+                                        ;;
+                                *)      clear
+                                        unset yn
+                                        title_bar
+                                        read -p "Invalid input. Press Enter to Continue..."  
+                                        ;;
+                                esac
+                        done
+                        ;;
                 esac
-                # fi
                 ;;
-                
-        esac
-done
+                # Display warning and prompt to save or re-enter input if IP address could not be pinged        
+        1)    clear
+                title_bar
+                read -p "\"$input\" is not a valid IP Address. Press Enter to Continue..."
+                unset input
+                ;;
+        esac                               
 }
+
+# Runs this function when the main function requests a username/password as input.
+userpass(){
+        check_userpass
+        case "$return" in
+        0)      username=$(echo "$input" | cut -d'/' -f1)
+                password=$(echo "$input" | cut -d'/' -f2)
+                clear
+                title_bar
+                echo -e "Running telnet session test on IP Address \"$input\". Please wait...\n"
+                check_telnet
+                sleep 5
+                case "$return" in
+                0)      echo "username=$username" >> "$outputlog"/"$ipaddress".log
+                        echo "password=$password" >> "$outputlog"/"$ipaddress".log
+                        clear
+                        title_bar
+                        read -p "Telnet connection successful. Press Enter to Continue..."                        
+                        unset input  
+                        break
+                        ;;
+                1)      unset yn
+                        while [ -z "$yn" ]; do
+                                clear
+                                title_bar
+                                read -p "Could not connect to \"$input\" via telnet. Continue anyways? (y/n): " yn
+                                case "$yn" in
+                                y)      echo "username=$username" >> "$outputlog"/"$ipaddress".log
+                                        echo "password=$password" >> "$outputlog"/"$ipaddress".log
+                                        unset input  
+                                        break 2
+                                        ;;
+                                n)      unset input
+                                        ;;
+                                *)      clear
+                                        unset yn
+                                        read -p "Invalid input. Press Enter to Continue..."  
+                                        ;;
+                                esac
+                        done
+                        ;;
+                esac
+                ;;
+
+        1)  clear
+                title_bar
+                read -p "Input is invalid. Press Enter to Continue..."  
+                unset input
+                ;;
+
+        esac                           
+}
+
+# Runs this function when the main function requests a vessel name as input.
+vessel_name(){
+        unset yn
+        vname="$input"
+        while [ -z "$yn" ]; do    
+                clear
+                title_bar
+                read -p "You have entered \"$vname\" as the vessel name. Continue? (y/n): " yn
+                case "$yn" in
+                y)      confirm_inputs
+                        ;;
+                n)      unset input
+                        ;;
+                *)      clear
+                        unset yn
+                        title_bar
+                        read -p "Invalid input. Press Enter to Continue..."  
+                        ;;
+                esac
+        done
+}
+
+confirm_inputs(){
+        unset yn
+        while [ -z "$yn" ]; do    
+                clear
+                title_bar
+                echo -e "You have entered the following information...\n\nIP Address:\t$ipaddress\nUsername:\t$username\nPassword:\t$password\nVessel Name:\t$vname\n"
+                read -p "Would you like to save and exit (s) or quit without saving any information (q)?: " yn
+                case "$yn" in
+                s)      clear
+                        title_bar
+                        read -p "IP address $ipaddress added to the database and crontab. Press any key to exit... "
+                        clear
+                        ;;
+                q)      clear
+                        title_bar
+                        read -p "You have chosen to exit without adding an IP address. Press any key to exit... "
+                        clear
+                        break
+                        ;;        
+                *)      clear
+                        unset yn
+                        title_bar
+                        read -p "Invalid input. Press Enter to Continue..."  
+                        ;;
+                esac
+        done
+}
+
+# Input function for adding vessels
+input(){
+        # Run while loop until input variable is populated
+        while [ -z "$input" ] ; do
+                clear
+                # Prompt for input
+                title_bar
+                read -p "Enter $1: " input
+                # Run case statement based on input variable
+                case "$input" in
+                # Remove log file and quit loop if "q" is entered
+                q)      clear_logs
+                        clear
+                        break
+                        ;;
+                # Display warning if input is left blank and prompt to re-enter input
+                '')     clear
+                        title_bar
+                        read -p "Input is empty. Press Enter to Continue..."
+                        ;;
+                # Run check_ip function when IP address input is required
+                *)      case "$1" in
+                                                "IP Address")           ip_address
+                                                                        ;;
+                                                "Username/Password")    userpass
+                                                                        ;;
+                                                "Vessel Name")          vessel_name
+                                                                        ;;                                                                                                                                                              
+                                                esac                            
+                        ;;
+                esac
+        done
+        }
+
 # Main function of script
 main(){
-# Remove log file
-rm -f test.txt
-# Create input prompts from strings entered in for loop
-for string in "IP Address" "Username" "Password" "Vessel Name"; do
-        input "$string"
-done
-}
+        # Remove log files
+        clear_logs
+        # Create input prompts from strings entered in for loop
+        for string in "IP Address" "Username/Password" "Vessel Name"; do
+                input "$string"
+        done
+        }
 # Run main function
 main
 exit 0
