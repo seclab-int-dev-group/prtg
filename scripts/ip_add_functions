@@ -45,8 +45,8 @@ check_ip(){
 check_ping(){
         clear
         title_bar
-        echo "Running ping test on IP Address \"$input\". Please wait..."
-        return=$(ping -c5 -W30 "$input" &> "$pinglog"/"$ipaddress".log; echo "$?")
+        echo "Running ping test on IP Address \"$ipaddress\". Please wait..."
+        return=$(ping -c5 -W30 "$ipaddress" &> "$pinglog"/"$ipaddress".log; echo "$?")
         echo -e ""
         cat "$pinglog/$ipaddress.log"
         sleep 5
@@ -54,16 +54,16 @@ check_ping(){
 
 # Get Ping function for retrieving minimum, average and maximum ping aswell as packet loss.
 get_ping(){
-        ping_min=$(grep 'rtt min/avg/max/mdev = ' "$pinglog"/"$ipaddress".log | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/mdev = //")
-        ping_avg=$(grep 'rtt min/avg/max/mdev = ' "$pinglog"/"$ipaddress".log | cut -d'/' -f5 | sed 's/ ms//g')
-        ping_max=$(grep 'rtt min/avg/max/mdev = ' "$pinglog"/"$ipaddress".log | cut -d'/' -f6 | sed 's/ ms//g')
+        ping_min=$(grep 'rtt min/avg/max/mdev = ' "$pinglog"/"$ipaddress".log | cut -d'/' -f4 | sed 's/ ms//g' | sed "s/mdev = //" | cut -d'.' -f1)
+        ping_avg=$(grep 'rtt min/avg/max/mdev = ' "$pinglog"/"$ipaddress".log | cut -d'/' -f5 | sed 's/ ms//g' | cut -d'.' -f1)
+        ping_max=$(grep 'rtt min/avg/max/mdev = ' "$pinglog"/"$ipaddress".log | cut -d'/' -f6 | sed 's/ ms//g' | cut -d'.' -f1)
         packet_loss=$(grep 'packet loss' "$pinglog"/"$ipaddress".log | cut -d' ' -f6 | sed 's/%//g')
         echo -e "ping_min=$ping_min\nping_avg=$ping_avg\nping_max=$ping_max\npacket_loss=$packet_loss" >> "$outputlog"/"$ipaddress".log
 }
 
 # Log input function.
 log_input(){
-        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -r "s/ |-/_/" >> "$outputlog"/"$ipaddress".log
+        echo "$1=$input" | tr '[:upper:]' '[:lower:]' | sed -e "s/ \|-/_/" >> "$outputlog"/"$ipaddress".log
         unset input
 }
 # Function checking if username and password are entered correctly.
@@ -89,15 +89,16 @@ check_telnet(){
 
 # Runs this function when the main function requests an IP address as input.
 ip_address(){
+        # ipaddress="$input"
         check_ip
         case "$return" in
         # Add entered input into log file and quit loop if IP address is valid and successfully pinged
-        0)    ipaddress="$input"
-		check_ping
+        0)      ipaddress="$input"
+                check_ping
                 case "$return" in
                 0)      ipaddress="$input"
                         log_input "$string"
-			get_ping
+                        get_ping
                         clear
                         title_bar
                         read -p "Ping test successful. Press Enter to Continue..." 
@@ -126,7 +127,7 @@ ip_address(){
                 esac
                 ;;
                 # Display warning and prompt to save or re-enter input if IP address could not be pinged        
-        1)    clear
+        1)      clear
                 title_bar
                 read -p "\"$input\" is not a valid IP Address. Press Enter to Continue..."
                 unset input
@@ -189,7 +190,7 @@ userpass(){
 # Runs this function when the main function requests a vessel name as input.
 vessel_name(){
         unset yn
-        vname="$input"
+        vname=$(echo "$input" | tr '[:lower:]' '[:upper:]' | sed -e 's/_\|-/ /g')
         while [ -z "$yn" ]; do    
                 clear
                 title_bar
@@ -208,6 +209,108 @@ vessel_name(){
         done
 }
 
+get_data(){
+        # Grab latitude data from temporary file,populate variable named lat and make log entry.
+        lat=$( grep "latlong = " "$rawlog"/"$ipaddress".log | cut -d" " -f3-4 | sed 's/\r//g')
+        # grep "latlong = " "$rawlog"/"$ipaddress".log | cut -d" " -f3-4 | sed 's/\r//g' >> "$outputlog"/"$ipaddress".log
+
+        # Convert Latitude variable to PRTG compatible value.
+        if [[ $lat == *N ]]; then
+                lat=$(echo "$lat" | sed 's/.$//' | sed 's/ //')
+        else
+                lat=$(echo "-$lat" | sed 's/.$//' | sed 's/ //')
+        fi
+        
+        echo "lat=$lat" >> "$outputlog"/"$ipaddress".log
+
+
+        # Grab longitude data from temporary file, populate variable named long and make log entry.
+        lng=$( grep "latlong = " "$rawlog"/"$ipaddress".log | cut -d" " -f5-6 | sed 's/\r//g' )
+        # grep "latlong = " "$rawlog"/"$ipaddress".log | cut -d" " -f5-6 | sed 's/\r//g' >> "$outputlog"/"$ipaddress".log
+
+        # Convert longitude variable to PRTG compatible value.
+        if [[ $lng == *E ]]; then
+                lng=$(echo "$lng" | sed 's/.$//' | sed 's/ //')
+        else
+                lng=$(echo "-$lng" | sed 's/.$//' | sed 's/ //')
+        fi
+
+        echo "lng=$lng" >> "$outputlog"/"$ipaddress".log
+
+        # Grab Rx SNR data from temporary file, populate variable named rxsnr and make log entry.
+        rxsnr=$( grep "Rx SNR: " "$rawlog"/"$ipaddress".log | cut -d" " -f3 | sed 's/\r//g' )
+        # grep "Rx SNR: " "$rawlog"/"$ipaddress".log | cut -d" " -f3 | sed 's/\r//g' >> "$outputlog"/"$ipaddress".log
+        echo "rxsnr=$rxsnr" >> "$outputlog"/"$ipaddress".log
+
+        # Grab Rx reg raw data from temporary file, populate variable named rxrr and make log entry.
+        rxrr=$( grep "Rx raw reg: " "$rawlog"/"$ipaddress".log | cut -d" " -f4 | sed 's/\r//g' )
+        # grep "Rx raw reg: " "$rawlog"/"$ipaddress".log | cut -d" " -f4 | sed 's/\r//g' >> "$outputlog"/"$ipaddress".log
+        echo "rxrr=$rxrr" >> "$outputlog"/"$ipaddress".log
+
+        # Grab Rx reg raw lookup data from temporary file, populate variable named rxrrl and make log entry.
+        rxrrl=$( grep "Rx raw reg lookup: " "$rawlog"/"$ipaddress".log | cut -d" " -f5 | sed 's/\r//g' )
+        # grep "Rx raw reg lookup: " "$rawlog"/"$ipaddress".log | cut -d" " -f5 | sed 's/\r//g' >> "$outputlog"/"$ipaddress".log
+        echo "rxrrl=$rxrrl" >> "$outputlog"/"$ipaddress".log
+
+        # Grab selected beam from temporary file, find corresponding beam, populate variable named beam and make log entry.
+        beam_id=$( grep " is currently selected" "$rawlog"/"$ipaddress".log | cut -d" " -f1 | sed 's/\r//g' )
+        # grep " is currently selected" "$rawlog"/"$ipaddress".log | cut -d" " -f1 | sed 's/\r//g' >> "$outputlog"/"$ipaddress".log
+        echo "bean_id=$beam_id" >> "$outputlog"/"$ipaddress".log
+        
+        beam_name=$( grep "$beam_id = " "$rawlog"/"$ipaddress".log | cut -d" " -f3-20 | sed 's/\r//g' )
+        # grep "$beam_id = " "$rawlog"/"$ipaddress".log | cut -d" " -f3-20 | sed 's/\r//g' >> "$outputlog"/"$ipaddress".log
+        echo "beam_name=$beam_name" >> "$outputlog"/"$ipaddress".log
+
+        echo "vessel_name=$vname" >> "$outputlog"/"$ipaddress".log
+
+        vid=$(echo "$vname" | tr '[:upper:]' '[:lower:]' | sed -e 's/ \|-/_/g')
+        echo "vessel_id=$vid" >> "$outputlog"/"$ipaddress".log
+
+        unset state
+        state="online"
+
+        if [[ $ping_avg -gt 500 || $packet_loss -gt 0 ]]; then
+                state="warning"
+        fi
+
+        if [[ "$lat" != *.* || "$lng" != *.* ]]; then
+                state="offline"
+        fi 
+
+        echo "state=$state" >> "$outputlog"/"$ipaddress".log
+}
+
+check_db(){
+        checkdb=$(mysql $db -u$dbuser -p$dbpass -e "SELECT IP_Address FROM $table WHERE IP_Address='$ipaddress';" | grep -v 'IP_Address')
+        if [[ "$checkdb" = "$ipaddress" ]]; then
+                mysql $db -u$dbuser -p$dbpass -e "DELETE FROM $table WHERE IP_Address='$ipaddress';"
+                sudo sed -i '/'$ipaddress'/d' /etc/crontab
+        fi
+        mysql $db -u$dbuser -p$dbpass -e "INSERT INTO \
+        $table (IP_Address) \
+        VALUES ('$ipaddress');"
+}
+
+insert_data(){
+        # Insert data from above variables into MySQL database table.
+        mysql $db -u$dbuser -p$dbpass -e "UPDATE $table SET \
+        Vessel_Name='$vname', \
+        Vessel_ID='$vid', \
+        Ping_Min='$ping_min', \
+        Ping_Avg='$ping_avg', \
+        Ping_Max='$ping_max', \
+        Packet_Loss='$packet_loss', \
+        Latitude='$lat', \
+        Longitude='$lng', \
+        Rx_SNR='$rxsnr', \
+        Rx_Raw_Reg='$rxrr', \
+        Rx_Raw_Reg_Lookup='$rxrrl', \
+        Beam_ID='$beam_id', \
+        Beam_Name='$beam_name', \
+        State='$state' \
+        WHERE IP_Address='$ipaddress';"
+}
+
 confirm_inputs(){
         unset yn
         while [ -z "$yn" ]; do    
@@ -216,7 +319,11 @@ confirm_inputs(){
                 echo -e "You have entered the following information...\n\nIP Address:\t$ipaddress\nUsername:\t$username\nPassword:\t$password\nVessel Name:\t$vname\n"
                 read -p "Would you like to save and exit (s) or quit without saving any information (q)?: " yn
                 case "$yn" in
-                s)      clear
+                s)      check_db
+                        get_data
+                        insert_data
+                        # check_db
+                        clear
                         title_bar
                         read -p "IP address $ipaddress added to the database and crontab. Press any key to exit... "
                         clear
