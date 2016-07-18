@@ -269,7 +269,7 @@ get_data(){
         unset state
         state="online"
 
-        if [[ $ping_avg -gt 500 || $packet_loss -gt 0 ]]; then
+        if [[ $ping_avg -gt 1250 || $packet_loss -gt 0 ]]; then
                 state="warning"
         fi
 
