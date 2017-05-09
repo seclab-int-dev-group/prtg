@@ -1,42 +1,39 @@
-#E3Systems Documentation
-<sub>**Created by:** William Thomas Bland<br>
-**Current Version:** 16.0523.2145<br>
-**Last updated:** 21:45 23/05/16
-</sub>
+# E3Systems Documentation
+<sub>**Created by:** William Thomas Bland</sub>
 ---
 
 
-###Description
+### Description
 
 The system runs on a CentOS 7 server serving as a proxy data gathering server for PRTG Network Monitor connecting to each IP address added as a cronjob via telnet, gathering location, Signal and Beam data every 5 minutes as well as gathering ping and packet loss data every 30 seconds. Data pulled from each IP address is stored in a MYSQL database on the CentOS 7 server. Custom PRTG SSH sensors are used to pull the gathered data for each IP address from the MYSQL database and update the values, messages and control room map for each sensor on PRTG Network Monitor.
 
 ---
 <br>
-##CentOS 7 Server
+## CentOS 7 Server
 
-###Project Files Location
+### Project Files Location
 
 Project files are located inside ***/home/e3admin/e3systems/***
 ![image00.jpg](images/image00.jpg)
 ![image01.jpg](images/image01.jpg)
 
 ---
-###Adding an IP Address
+### Adding an IP Address
 
 Add a new IP address by running the following custom command: ***ip_add ipaddress username password vessel***
 ![image02.jpg](images/image02.jpg)
 
 ---
-###Removing an IP Address
+### Removing an IP Address
 
 Remove an IP address by running the following custom command: ***ip_del ipaddress***
 ![image03.jpg](images/image03.jpg)
 
 ---
 <br>
-##PRTG Network Monitor
+## PRTG Network Monitor
 
-###Adding a Device
+### Adding a Device
 
 ***Step 1*** - Enter a desired name for device under “Device Name”.<br>
 ***Step 2*** - Select “Connect using IPv4” under “IP Version”.<br>
@@ -48,7 +45,7 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ![image04.jpg](images/image04.jpg)
 
 ---
-###Adding a Custom Sensor
+### Adding a Custom Sensor
 
 ***Step 1*** - Under “Monitor What?” select “Custom Sensors”.<br>
 ***Step 2*** - Under “Target System Type” select “Linux/MacOS”.<br>
@@ -62,7 +59,7 @@ Remove an IP address by running the following custom command: ***ip_del ipaddres
 ![image06.jpg](images/image06.jpg)
 
 ---
-###Adding a Custom Map Object
+### Adding a Custom Map Object
 
 ***Step 1*** - Select the sensor created from the previous steps from the “Device Tree” on the  left side.<br>
 ***Step 2*** - Select the “Status Icons” list from the “Properties” section on the right side.<br>
