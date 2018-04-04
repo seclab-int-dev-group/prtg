@@ -1,4 +1,4 @@
-# E3Systems Documentation
+# Documentation
 <sub>**Created by:** William Thomas Bland</sub>
 ---
 
