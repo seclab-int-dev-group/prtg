@@ -7,8 +7,8 @@
 ###############################################################################################################################
 
 # Declare variables.
-db="e3db"         # MySQL database name.
-table="e3tb"      # MySQL table name.
+db=""         # MySQL database name.
+table=""      # MySQL table name.
 dbuser=""           # MySQL database username
 dbpass=""           # MySQL database password
 lat=$(mysql $db -u$dbuser -p$dbpass -e "SELECT Latitude FROM $table WHERE IP_Address='$1';" | grep -v 'Latitude')
