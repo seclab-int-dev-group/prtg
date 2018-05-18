@@ -7,15 +7,15 @@
 ###############################################################################################################################
 
 # Declare variables.
-user="e3admin"
-db="e3db"                        		   # MySQL database name.
-table="e3tb"                     		   # MySQL table name.
-dbuser="e3admin"                  		   # MySQL database username
-dbpass="E3System5!"             	           # MySQL database password
-outlog="/home/$user/e3systems/logs/output"         # Output log file location.
-rawlog="/home/$user/e3systems/logs/raw"            # Raw log file location.
-pinglog="/home/$user/e3systems/logs/ping"
-telnet="/home/$user/e3systems/scripts/ip_tel.sh"   # Telnet script location.
+user=""
+db=""                        		   # MySQL database name.
+table=""                     		   # MySQL table name.
+dbuser=""                  		   # MySQL database username
+dbpass=""             	           # MySQL database password
+outlog="/home/$user/prtg/logs/output"         # Output log file location.
+rawlog="/home/$user/prtg/logs/raw"            # Raw log file location.
+pinglog="/home/$user/prtg/logs/ping"
+telnet="/home/$user/prtg/scripts/ip_tel.sh"   # Telnet script location.
 
 ###############################################################################################################################
 
