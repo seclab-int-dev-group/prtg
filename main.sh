@@ -8,14 +8,15 @@
 
 # Declare variables.
 user=""
-db=""                        		   # MySQL database name.
-table=""                     		   # MySQL table name.
-dbuser=""                  		   # MySQL database username
-dbpass=""             	           # MySQL database password
+db=""                        		      # MySQL database name.
+table=""                     		      # MySQL table name.
+dbuser=""                  		      # MySQL database username
+dbpass=""             	          	      # MySQL database password
 outlog="/home/$user/prtg/logs/output"         # Output log file location.
 rawlog="/home/$user/prtg/logs/raw"            # Raw log file location.
 pinglog="/home/$user/prtg/logs/ping"
 telnet="/home/$user/prtg/scripts/ip_tel.sh"   # Telnet script location.
+homedir=""
 
 ###############################################################################################################################
 
@@ -110,13 +111,13 @@ sed -i "s/^var $name\_.*.png',});$/var $name\_marker=new google.maps.Marker({pos
 sed -i "s/^var $name\_.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'..\/images\/marker-online.png',});/" /var/www/html/map/maps/caribbean.html
 sed -i "s/^<li><a href=\"\#\"><img src=\"images\/marker-.*.png\"> $content ($1)<\/a><\/li>$/<li><a href=\"\#\"><img src=\"images\/marker-online.png\"> $content ($1)<\/a><\/li>/" /var/www/html/map/index.html
 
-#getping=$(mysql e3db -ue3admin -pE3System5! -e "SELECT Ping FROM e3tb WHERE IP_Address='$1';" | grep -v 'Ping')
+#getping=$(mysql $db -u$dbser -p$sbpass -e "SELECT Ping FROM $table WHERE IP_Address='$1';" | grep -v 'Ping')
 
 getping=$(grep 'time=' $pinglog/"$1" | cut -d'=' -f4 | sed 's/ ms//g')
 
 
-echo "$1" > /home/e3admin/e3systems/test.txt
-echo "$getping" >> /home/e3admin/e3systems/test.txt
+echo "$1" > '$homedir'/test.txt
+echo "$getping" >> '$homedir'test.txt
 
 if [[ -n "$checkip" && "$getping" -gt 900 ]]; then
 sed -i "s/^var $name\_.*.png',});$/var $name\_marker=new google.maps.Marker({position:new google.maps.LatLng($lat,$long),icon:'..\/images\/marker-warning.png',});/" /var/www/html/map/maps/global.html
