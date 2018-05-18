@@ -7,8 +7,8 @@
 ###############################################################################################################################
 
 # Declare variables.
-db="e3db"         # MySQL database name.
-table="e3tb"      # MySQL table name.
+db=""         # MySQL database name.
+table=""      # MySQL table name.
 dbuser=""           # MySQL database username
 dbpass=""           # MySQL database password
 rxsnr=$(mysql $db -u$dbuser -p$dbpass -e \
