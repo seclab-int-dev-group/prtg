@@ -13,21 +13,17 @@ The system runs on a CentOS 7 server serving as a proxy data gathering server fo
 
 ### Project Files Location
 
-Project files are located inside ***/home/e3admin/e3systems/***
-![image00.jpg](images/image00.jpg)
-![image01.jpg](images/image01.jpg)
+Project files are located inside ***/home/user/prtg/***
 
 ---
 ### Adding an IP Address
 
 Add a new IP address by running the following custom command: ***ip_add ipaddress username password vessel***
-![image02.jpg](images/image02.jpg)
 
 ---
 ### Removing an IP Address
 
 Remove an IP address by running the following custom command: ***ip_del ipaddress***
-![image03.jpg](images/image03.jpg)
 
 ---
 <br>
