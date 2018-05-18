@@ -7,11 +7,11 @@
 ###############################################################################################################################
 
 # Declare variables.
-user="e3admin"
-db="e3db"           # MySQL database name.
-table="e3tb"        # MySQL table name.
-dbuser="e3admin"    # MySQL database username.
-dbpass="E3System5!" # MySQL database password.
+user=""
+db=""           # MySQL database name.
+table=""        # MySQL table name.
+dbuser=""    # MySQL database username.
+dbpass="" # MySQL database password.
 
 ###############################################################################################################################
 
@@ -38,7 +38,7 @@ else
     sudo sed -i '/'$1'/d' /etc/crontab
 
     # Remove log files corresponding to IP address set as argument.
-    rm -f /home/$user/e3systems/logs/*/$1
+    rm -f /home/$user/prtg/logs/*/$1
     
     # Remove corresponding database row.
     mysql $db -u$dbuser -p$dbpass -e "DELETE FROM $table WHERE IP_Address='$1';"
